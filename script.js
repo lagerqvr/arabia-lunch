@@ -115,8 +115,22 @@ async function fetchLunchMenu(URL, divId) {
                 const menuParagraph = document.createElement('p');
                 const components = menu.Components.join(', ');
 
-                menuParagraph.innerHTML = `<b>${menu.Name}:</b> ${components}`;
-                lunchDiv.appendChild(menuParagraph);
+                // Add the menu name to the paragraph for DIAK
+                if (divId === 'diak-menu') {
+                    const menuName = menu.Name;
+                    const trimmedMenuName = menuName.split(' ')[0]; // Get the first word "Vegetable"
+                    const updatedMenuName = trimmedMenuName + " lunch";
+                    if (updatedMenuName === 'Lunch lunch') {
+                        menuParagraph.innerHTML = `<b>Lunch:</b> ${components}`;
+                        lunchDiv.appendChild(menuParagraph);
+                    } else {
+                        menuParagraph.innerHTML = `<b>${updatedMenuName}:</b> ${components}`;
+                        lunchDiv.appendChild(menuParagraph);
+                    }
+                } else {
+                    menuParagraph.innerHTML = `<b>${menu.Name}:</b> ${components}`;
+                    lunchDiv.appendChild(menuParagraph);
+                }
             }
         } else {
             lunchDiv.innerHTML = '<p>No lunch data available for today.</p>';
@@ -126,13 +140,6 @@ async function fetchLunchMenu(URL, divId) {
         outputError(error.message + ` (${error.stack})`);
         console.error('An error occurred:', error);
     }
-};
-
-// Helper function to format a menu
-function formatMenu(menu) {
-    return menu.Components.map(component => {
-        return `${component.Name} (${component.Allergens})`;
-    }).join(',<br>');
 };
 
 // Call the async function to fetch and display the food menu
