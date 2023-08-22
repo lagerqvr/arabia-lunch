@@ -50,6 +50,21 @@ const getTheme = () => {
 };
 getTheme();
 
+/// Function to fetch and display current date
+const getDate = () => {
+    try {
+        const date = new Date();
+        const day = date.getDate();
+        const month = date.getMonth() + 1; // Months are zero-based
+        const year = date.getFullYear();
+        const formattedDate = `${day}.${month}.${year}`;
+        document.querySelector('.currentDate').innerHTML = ' - ' + formattedDate;
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+getDate();
+
 // Function to fetch and display the food menu
 async function fetchFoodMenu(URL, divId) {
     try {
