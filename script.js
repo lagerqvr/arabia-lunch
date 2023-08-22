@@ -15,6 +15,9 @@ async function fetchFoodMenu(URL, divId) {
         const data = await response.json();
         console.log('Data fetched:', data);
 
+        // Clear the div
+        document.getElementById(divId).innerHTML = '';
+
         // Get the div where you want to display the data
         const lunchDiv = document.getElementById(divId);
 
