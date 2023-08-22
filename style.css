@@ -27,3 +27,8 @@ footer>a {
 .container {
     flex: 1 0 auto;
 }
+
+#arcada-menu,
+#errorMsg {
+    font-size: 14px;
+}

@@ -40,11 +40,11 @@
                         <h2><b>Arabia Lunch</b><span class="currentDate"></span></h2>
                     </div>
                     <div class="col-2 d-flex justify-content-end">
-                        <div id="toggler-div" class="mt-1"></div>
+                        <div id="toggler-div"></div>
                     </div>
                 </div>
                 <p class="mb-0">One place for all your Arabia lunchlist needs.</p>
-                <div class="p-1">
+                <div>
                     <div class="row">
                         <div class="col-sm-6 mt-3">
                             <div class="accordion" id="accordion">
@@ -59,7 +59,11 @@
                                     <div id="collapseOne" class="accordion-collapse collapse"
                                         data-bs-parent="#accordion">
                                         <div class="accordion-body">
-                                            <div id="arcada-menu"></div>
+                                            <div id="arcada-menu">
+                                                <p><b>Lunch:</b> Cod with almonds (*, A, G, L),
+                                                    Mashed potatoes (*, A, G, ILM, L)</p>
+                                                <p><b>Vegan lunch:</b> Vegetable moussaka (*, A, G, ILM, L, VS)</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -99,7 +103,7 @@
                                     <div id="collapseThree" class="accordion-collapse collapse"
                                         data-bs-parent="#accordion">
                                         <div class="accordion-body">
-                                            <div id="chemicum-menu">🚧 Coming soon</div>
+                                            <div id="chemicum-menu">🚧 Coming soon... 🚧</div>
                                         </div>
                                     </div>
                                 </div>
@@ -125,6 +129,7 @@
                                 </div>
                             </div>
                         </div>
+                        <div id="errorMsg" class="mt-2"></div>
                     </div>
                 </div>
             </div>

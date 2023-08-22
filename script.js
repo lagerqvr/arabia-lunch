@@ -16,6 +16,7 @@ const checkTheme = () => {
             document.documentElement.setAttribute('data-bs-theme', 'light');
         }
     } catch (error) {
+        outputError(error.message + ` (${error.stack})`);
         console.log(error.message);
     }
 };
@@ -33,6 +34,7 @@ const toggleTheme = () => {
         }
         checkTheme(); // Update the theme icon and data-bs-theme attribute
     } catch (error) {
+        outputError(error.message + ` (${error.stack})`);
         console.log(error.message);
     }
 };
@@ -45,6 +47,7 @@ const getTheme = () => {
             checkTheme(); // Update the theme icon and data-bs-theme attribute
         }
     } catch (error) {
+        outputError(error.message + ` (${error.stack})`);
         console.log(error.message);
     }
 };
@@ -60,10 +63,21 @@ const getDate = () => {
         const formattedDate = `${day}.${month}.${year}`;
         document.querySelector('.currentDate').innerHTML = ' - ' + formattedDate;
     } catch (error) {
+        outputError(error.message + ` (${error.stack})`);
         console.log(error.message);
     }
 };
 getDate();
+
+// Log result to application log
+const outputError = (input) => {
+    try {
+        document.querySelector("#errorMsg").innerHTML += `<p class="text-danger ml-1 mt-1 mb-0"><b>${input}</b></p>`;
+    } catch (error) {
+        outputError(error.message + ` (${error.stack})`);
+        console.log(error.message);
+    }
+};
 
 // Function to fetch and display the food menu
 async function fetchFoodMenu(URL, divId) {
@@ -117,12 +131,13 @@ async function fetchFoodMenu(URL, divId) {
 
         // Get the food menu
     } catch (error) {
+        outputError(error.message + ` (${error.stack})`);
         console.error('An error occurred:', error);
     }
 };
 
 // Call the async function to fetch and display the food menu
-fetchFoodMenu('https://www.compass-group.fi/menuapi/feed/json?costNumber=3003&language=en', 'arcada-menu');
+// fetchFoodMenu('https://www.compass-group.fi/menuapi/feed/json?costNumber=3003&language=en', 'arcada-menu');
 fetchFoodMenu('https://www.compass-group.fi/menuapi/feed/json?costNumber=3104&language=en', 'diak-menu');
 // fetchFoodMenu('', 'chemicum-menu');
 fetchFoodMenu('https://www.compass-group.fi/menuapi/feed/json?costNumber=1256&language=en', 'artebia-menu');
