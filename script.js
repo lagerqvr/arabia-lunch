@@ -102,21 +102,22 @@ async function fetchLunchMenu(URL, divId) {
         const lunchDiv = document.getElementById(divId);
 
         // Find today's lunch menu
-        const today = new Date().toISOString().split('T')[0];
+        const today = new Date().toISOString().split('T')[0] + 'T00:00:00+00:00';
+        console.log(today);
         const todayMenu = data.MenusForDays.find(dayMenu => dayMenu.Date === today);
+        console.log(todayMenu);
 
         if (todayMenu && todayMenu.SetMenus) {
-            // Create lunch and vegan lunch paragraphs
-            const lunchParagraph = document.createElement('p');
-            const veganLunchParagraph = document.createElement('p');
+            const lunchTime = document.createElement('p');
+            lunchTime.innerHTML = `<b class="text-success">${todayMenu.LunchTime}</b>`;
+            lunchDiv.appendChild(lunchTime);
+            for (const menu of todayMenu.SetMenus) {
+                const menuParagraph = document.createElement('p');
+                const components = menu.Components.join(', ');
 
-            // Add content to the paragraphs
-            lunchParagraph.innerHTML = `<b>Lunch:</b> ${formatMenu(todayMenu.SetMenus[0])}`;
-            veganLunchParagraph.innerHTML = `<b>Vegan lunch:</b> ${formatMenu(todayMenu.SetMenus[1])}`;
-
-            // Append paragraphs to lunchDiv
-            lunchDiv.appendChild(lunchParagraph);
-            lunchDiv.appendChild(veganLunchParagraph);
+                menuParagraph.innerHTML = `<b>${menu.Name}:</b> ${components}`;
+                lunchDiv.appendChild(menuParagraph);
+            }
         } else {
             lunchDiv.innerHTML = '<p>No lunch data available for today.</p>';
         }
@@ -130,12 +131,12 @@ async function fetchLunchMenu(URL, divId) {
 // Helper function to format a menu
 function formatMenu(menu) {
     return menu.Components.map(component => {
-        return `${component.Name} (${component.Allergens.join(', ')})`;
+        return `${component.Name} (${component.Allergens})`;
     }).join(',<br>');
 };
 
 // Call the async function to fetch and display the food menu
-// fetchLunchMenu('https://www.compass-group.fi/menuapi/feed/json?costNumber=3003&language=en', 'arcada-menu');
+fetchLunchMenu('https://www.compass-group.fi/menuapi/feed/json?costNumber=3003&language=en', 'arcada-menu');
 fetchLunchMenu('https://www.compass-group.fi/menuapi/feed/json?costNumber=3104&language=en', 'diak-menu');
 // fetchLunchMenu('', 'chemicum-menu');
 fetchLunchMenu('https://www.compass-group.fi/menuapi/feed/json?costNumber=1256&language=en', 'artebia-menu');
