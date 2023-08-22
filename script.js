@@ -91,7 +91,8 @@ async function fetchLunchMenu(URL, divId) {
             mode: 'cors',
         });
 
-        document.getElementById(divId).innerHTML = 'Fetching lunch menu...';
+        console.log('Response status code:', response.status);
+        outputError('Response status code: ' + response.status);
 
         const data = await response.json();
         console.log('Fetched data:', data);
