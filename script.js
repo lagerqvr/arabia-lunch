@@ -79,10 +79,10 @@ const outputError = (input) => {
     }
 };
 
-// Function to fetch and display the food menu
-async function fetchFoodMenu(URL, divId) {
+// Function to fetch and display the lunch for the specific day
+async function fetchLunchMenu(URL, divId) {
     try {
-        // Fetch the HTML content
+        // Fetch the JSON content
         const response = await fetch(URL, {
             method: 'GET',
             headers: {
@@ -101,43 +101,41 @@ async function fetchFoodMenu(URL, divId) {
         // Get the div where you want to display the data
         const lunchDiv = document.getElementById(divId);
 
-        // Loop through the menus for each day and create a table
-        data.MenusForDays.forEach(dayMenu => {
-            const table = document.createElement('table');
-            const date = new Date(dayMenu.Date);
-            const dateCell = document.createElement('th');
-            dateCell.textContent = date.toDateString();
-            dateCell.colSpan = 2;
+        // Find today's lunch menu
+        const today = new Date().toISOString().split('T')[0];
+        const todayMenu = data.MenusForDays.find(dayMenu => dayMenu.Date === today);
 
-            // Loop through the set menus for the day
-            dayMenu.SetMenus.forEach(menu => {
-                const menuRow = table.insertRow();
-                const menuCell = menuRow.insertCell(0);
-                const menuHeader = document.createElement('th');
-                menuHeader.textContent = menu.Name;
-                menuCell.appendChild(menuHeader);
+        if (todayMenu && todayMenu.SetMenus) {
+            // Create lunch and vegan lunch paragraphs
+            const lunchParagraph = document.createElement('p');
+            const veganLunchParagraph = document.createElement('p');
 
-                // Loop through the components of the menu and add them to the row
-                menu.Components.forEach(component => {
-                    const componentCell = menuRow.insertCell();
-                    componentCell.textContent = component;
-                });
-            });
+            // Add content to the paragraphs
+            lunchParagraph.innerHTML = `<b>Lunch:</b> ${formatMenu(todayMenu.SetMenus[0])}`;
+            veganLunchParagraph.innerHTML = `<b>Vegan lunch:</b> ${formatMenu(todayMenu.SetMenus[1])}`;
 
-            // Append the table to the arcada-lunch div
-            lunchDiv.appendChild(dateCell);
-            lunchDiv.appendChild(table);
-        });
+            // Append paragraphs to lunchDiv
+            lunchDiv.appendChild(lunchParagraph);
+            lunchDiv.appendChild(veganLunchParagraph);
+        } else {
+            lunchDiv.innerHTML = '<p>No lunch data available for today.</p>';
+        }
 
-        // Get the food menu
     } catch (error) {
         outputError(error.message + ` (${error.stack})`);
         console.error('An error occurred:', error);
     }
 };
 
+// Helper function to format a menu
+function formatMenu(menu) {
+    return menu.Components.map(component => {
+        return `${component.Name} (${component.Allergens.join(', ')})`;
+    }).join(',<br>');
+};
+
 // Call the async function to fetch and display the food menu
-// fetchFoodMenu('https://www.compass-group.fi/menuapi/feed/json?costNumber=3003&language=en', 'arcada-menu');
-fetchFoodMenu('https://www.compass-group.fi/menuapi/feed/json?costNumber=3104&language=en', 'diak-menu');
-// fetchFoodMenu('', 'chemicum-menu');
-fetchFoodMenu('https://www.compass-group.fi/menuapi/feed/json?costNumber=1256&language=en', 'artebia-menu');
+// fetchLunchMenu('https://www.compass-group.fi/menuapi/feed/json?costNumber=3003&language=en', 'arcada-menu');
+fetchLunchMenu('https://www.compass-group.fi/menuapi/feed/json?costNumber=3104&language=en', 'diak-menu');
+// fetchLunchMenu('', 'chemicum-menu');
+fetchLunchMenu('https://www.compass-group.fi/menuapi/feed/json?costNumber=1256&language=en', 'artebia-menu');
