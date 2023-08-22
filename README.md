@@ -1,2 +1,2 @@
 # arabia-lunch
-Simple web scraper for fetching student lunch menus in Arabianranta area.
+Simple frontend for fetching student lunch menus in Arabianranta area in Helsinki.
