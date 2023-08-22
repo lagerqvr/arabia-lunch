@@ -3,6 +3,12 @@ body {
     height: 100%;
     display: flex;
     flex-direction: column;
+    /*
+    background-image: url("../img/blob-haikei.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    */
 }
 
 footer {
