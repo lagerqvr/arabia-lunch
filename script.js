@@ -88,9 +88,10 @@ async function fetchLunchMenu(URL, divId) {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
+            mode: 'cors',
         });
 
-        document.getElementById(divId).innerHTML = '<p>Fetching data...</p>';
+        document.getElementById(divId).innerHTML = 'Fetching lunch menu...';
 
         const data = await response.json();
         console.log('Fetched data:', data);
