@@ -10,6 +10,7 @@ async function fetchFoodMenu(URL, divId) {
         });
 
         console.log('Fetching data...');
+        document.getElementById(divId).innerHTML = '<p>Fetching data...</p>';
 
         const data = await response.json();
         console.log('Data fetched:', data);
