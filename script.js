@@ -79,7 +79,7 @@ const outputError = (input) => {
     }
 };
 
-// Function to fetch and display the lunch for the specific day
+// Function to fetch and display the lunch for the specific day from Arcada, Diak and Artebia 135
 async function fetchLunchMajority(URL, divId) {
     try {
         // Proxy URL to bypass CORS
@@ -112,6 +112,7 @@ async function fetchLunchMajority(URL, divId) {
             const lunchTime = document.createElement('p');
             lunchTime.innerHTML = `<p><b>Opening hours:</b><span class="text-success"> ${todayMenu.LunchTime}</span></p>`;
             lunchDiv.appendChild(lunchTime);
+            let count = 1;
             for (const menu of todayMenu.SetMenus) {
                 const menuParagraph = document.createElement('p');
                 const components = menu.Components.join(', ');
@@ -122,8 +123,9 @@ async function fetchLunchMajority(URL, divId) {
                     const trimmedMenuName = menuName.split(' ')[0]; // Get the first word "Vegetable"
                     const updatedMenuName = trimmedMenuName + " lunch";
                     if (updatedMenuName === 'Lunch lunch') {
-                        menuParagraph.innerHTML = `<b>Lunch:</b> ${components}`;
+                        menuParagraph.innerHTML = `<b>Lunch ${count}:</b> ${components}`;
                         lunchDiv.appendChild(menuParagraph);
+                        count++;
                     } else {
                         menuParagraph.innerHTML = `<b>${updatedMenuName}:</b> ${components}`;
                         lunchDiv.appendChild(menuParagraph);
@@ -139,6 +141,63 @@ async function fetchLunchMajority(URL, divId) {
 
     } catch (error) {
         document.getElementById(divId).innerHTML = 'Failed to fetch lunch data.';
+        outputError(error.message + ` (${error.stack})`);
+        console.error('An error occurred:', error);
+    }
+};
+
+// Function to fetch and display the lunch for the specific day from Chemicum
+async function fetchChemicumLunch() {
+    try {
+        // Proxy URL to bypass CORS
+        const proxyURL = 'https://corsproxy.io/?'
+        const fullURL = proxyURL + 'https://unicafe.fi/wp-json/swiss/v1/restaurants?lang=en';
+
+        // Fetch the JSON content
+        const response = await fetch(fullURL, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+        });
+        const data = await response.json();
+        // console.log('Fetched data:', data);
+
+        const lunchData = data.find(data => data.title === 'Chemicum');
+
+        // Find today's lunch menu
+        const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const currentDate = new Date();
+        const day = daysOfWeek[currentDate.getDay()];
+        const todayFormatted = `${day} ${currentDate.getDate().toString().padStart(2, '0')}.${(currentDate.getMonth() + 1).toString().padStart(2, '0')}.`;
+
+        // Match todays date with the date in the fetched data
+        const todayMenu = lunchData.menuData.menus.find(menus => menus.date === todayFormatted);
+        console.log('Today\'s menu:', todayMenu);
+
+        // Get the div where you want to display the data
+        const lunchDiv = document.getElementById('chemicum-menu');
+
+        if (todayMenu) {
+            const lunchTime = document.createElement('p');
+            lunchTime.innerHTML = `<p><b>Opening hours:</b><span class="text-success"> ${lunchData.menuData.visitingHours.lounas.items[0].hours}</span></p>`;
+            lunchDiv.appendChild(lunchTime);
+            let count = 1;
+            for (const menu of todayMenu.data) {
+                const menuParagraph = document.createElement('p');
+                const components = menu.meta[0].join(', ');
+
+                menuParagraph.innerHTML = `<b>Lunch ${count}: </b>${menu.name}, (${components})`;
+                lunchDiv.appendChild(menuParagraph);
+                count++;
+            }
+        } else {
+            lunchDiv.innerHTML = '<p>No lunch data available for today.</p>';
+        }
+
+
+    } catch (error) {
+        document.getElementById('chemicum-menu').innerHTML = 'Failed to fetch lunch data.';
         outputError(error.message + ` (${error.stack})`);
         console.error('An error occurred:', error);
     }
