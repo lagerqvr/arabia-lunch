@@ -110,7 +110,7 @@ async function fetchLunchMajority(URL, divId) {
 
         if (todayMenu && todayMenu.SetMenus) {
             const lunchTime = document.createElement('p');
-            lunchTime.innerHTML = `<p><b>Opening hours:</b><span class="text-success"> ${todayMenu.LunchTime}</span></p>`;
+            lunchTime.innerHTML = `<p style="font-size: 18px"><b>Open:</b><span class="text-success"> ${todayMenu.LunchTime}</span></p>`;
             lunchDiv.appendChild(lunchTime);
             let count = 1;
             for (const menu of todayMenu.SetMenus) {
@@ -180,7 +180,7 @@ async function fetchChemicumLunch() {
 
         if (todayMenu) {
             const lunchTime = document.createElement('p');
-            lunchTime.innerHTML = `<p><b>Opening hours:</b><span class="text-success"> ${lunchData.menuData.visitingHours.lounas.items[0].hours}</span></p>`;
+            lunchTime.innerHTML = `<p style="font-size: 18px"><b>Open:</b><span class="text-success"> ${lunchData.menuData.visitingHours.lounas.items[0].hours}</span></p>`;
             lunchDiv.appendChild(lunchTime);
             let count = 1;
             for (const menu of todayMenu.data) {
