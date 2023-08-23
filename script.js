@@ -92,7 +92,6 @@ async function fetchLunchMenu(URL, divId) {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
-
         });
 
         // Log the response status code
@@ -101,9 +100,6 @@ async function fetchLunchMenu(URL, divId) {
 
         const data = await response.json();
         // console.log('Fetched data:', data);
-
-        // Clear the div
-        document.getElementById(divId).innerHTML = '';
 
         // Get the div where you want to display the data
         const lunchDiv = document.getElementById(divId);
@@ -114,7 +110,7 @@ async function fetchLunchMenu(URL, divId) {
 
         if (todayMenu && todayMenu.SetMenus) {
             const lunchTime = document.createElement('p');
-            lunchTime.innerHTML = `<b class="text-success">${todayMenu.LunchTime}</b>`;
+            lunchTime.innerHTML = `<p><b>Open today:</b><span class="text-success"> ${todayMenu.LunchTime}</span></p>`;
             lunchDiv.appendChild(lunchTime);
             for (const menu of todayMenu.SetMenus) {
                 const menuParagraph = document.createElement('p');
@@ -142,6 +138,7 @@ async function fetchLunchMenu(URL, divId) {
         }
 
     } catch (error) {
+        document.getElementById(divId).innerHTML = 'Failed to fetch lunch data.';
         outputError(error.message + ` (${error.stack})`);
         console.error('An error occurred:', error);
     }
