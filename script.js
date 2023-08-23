@@ -85,7 +85,6 @@ async function fetchLunchMenu(URL, divId) {
         // Proxy URL to bypass CORS
         const proxyURL = 'https://corsproxy.io/?'
         const fullURL = proxyURL + URL;
-        console.log(fullURL);
 
         // Fetch the JSON content
         const response = await fetch(fullURL, {
@@ -97,11 +96,11 @@ async function fetchLunchMenu(URL, divId) {
         });
 
         // Log the response status code
-        console.log('Response status code:', response.status);
-        outputError('Response status code: ' + response.status);
+        // console.log('Response status code:', response.status);
+        // outputError('Response status code: ' + response.status);
 
         const data = await response.json();
-        console.log('Fetched data:', data);
+        // console.log('Fetched data:', data);
 
         // Clear the div
         document.getElementById(divId).innerHTML = '';
@@ -111,9 +110,7 @@ async function fetchLunchMenu(URL, divId) {
 
         // Find today's lunch menu
         const today = new Date().toISOString().split('T')[0] + 'T00:00:00+00:00';
-        console.log(today);
         const todayMenu = data.MenusForDays.find(dayMenu => dayMenu.Date === today);
-        console.log(todayMenu);
 
         if (todayMenu && todayMenu.SetMenus) {
             const lunchTime = document.createElement('p');
