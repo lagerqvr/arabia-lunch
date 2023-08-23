@@ -110,7 +110,17 @@ async function fetchLunchMajority(URL, divId) {
 
         if (todayMenu && todayMenu.SetMenus) {
             const lunchTime = document.createElement('p');
-            lunchTime.innerHTML = `<p style="font-size: 18px"><b>Open:</b><span class="text-success"> ${todayMenu.LunchTime}</span></p>`;
+            switch (lunchDiv.id) {
+                case 'arcada-menu':
+                    lunchTime.innerHTML = `<p style="font-size: 18px"><b>Open:</b><span class="text-success"> ${todayMenu.LunchTime}</span> - <a style="text-decoration: none;" class="text-primary" href="https://www.compass-group.fi/ravintolat-ja-ruokalistat/foodco/kaupungit/helsinki/arcada/">Full menu</a></p>`;
+                    break;
+                case 'diak-menu':
+                    lunchTime.innerHTML = `<p style="font-size: 18px"><b>Open:</b><span class="text-success"> ${todayMenu.LunchTime}</span> - <a style="text-decoration: none;" class="text-primary" href="https://www.compass-group.fi/ravintolat-ja-ruokalistat/foodco/kaupungit/helsinki/diak-kalasatama/">Full menu</a></p>`;
+                    break;
+                case 'artebia-menu':
+                    lunchTime.innerHTML = `<p style="font-size: 18px"><b>Open:</b><span class="text-success"> ${todayMenu.LunchTime}</span> - <a style="text-decoration: none;" class="text-primary" href="https://www.compass-group.fi/ravintolat-ja-ruokalistat/foodco/kaupungit/helsinki/arabianranta/">Full menu</a></p>`;
+                    break;
+            }
             lunchDiv.appendChild(lunchTime);
             let count = 1;
             if (divId === 'artebia-menu') {
@@ -184,14 +194,14 @@ async function fetchChemicumLunch() {
 
         // Match todays date with the date in the fetched data
         const todayMenu = lunchData.menuData.menus.find(menus => menus.date === todayFormatted);
-        console.log('Today\'s menu:', todayMenu);
+        // console.log('Today\'s menu:', todayMenu);
 
         // Get the div where you want to display the data
         const lunchDiv = document.getElementById('chemicum-menu');
 
         if (todayMenu) {
             const lunchTime = document.createElement('p');
-            lunchTime.innerHTML = `<p style="font-size: 18px"><b>Open:</b><span class="text-success"> ${lunchData.menuData.visitingHours.lounas.items[0].hours}</span></p>`;
+            lunchTime.innerHTML = `<p style="font-size: 18px"><b>Open:</b><span class="text-success"> ${lunchData.menuData.visitingHours.lounas.items[0].hours}</span> - <a style="text-decoration: none;" class="text-primary" href="https://unicafe.fi/en/restaurants/chemicum/">Full menu</a></p>`;
             lunchDiv.appendChild(lunchTime);
             let count = 1;
             for (const menu of todayMenu.data) {
