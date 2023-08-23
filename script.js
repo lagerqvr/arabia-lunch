@@ -82,15 +82,21 @@ const outputError = (input) => {
 // Function to fetch and display the lunch for the specific day
 async function fetchLunchMenu(URL, divId) {
     try {
+        // Proxy URL to bypass CORS
+        const proxyURL = 'https://corsproxy.io/?'
+        const fullURL = proxyURL + URL;
+        console.log(fullURL);
+
         // Fetch the JSON content
-        const response = await fetch(URL, {
+        const response = await fetch(fullURL, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
-            mode: 'cors',
+
         });
 
+        // Log the response status code
         console.log('Response status code:', response.status);
         outputError('Response status code: ' + response.status);
 
