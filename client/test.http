@@ -1,0 +1,18 @@
+// Arcada lunch menu
+GET https://www.compass-group.fi/menuapi/feed/json?costNumber=3003&language=en
+
+###
+
+// Artebia 135 lunch menu
+GET https://www.compass-group.fi/menuapi/feed/json?costNumber=1256&language=en
+
+###
+
+// DIAK lunch menu
+GET https://www.compass-group.fi/menuapi/feed/json?costNumber=3104&language=en
+
+###
+
+// Chemicum lunch menu
+GET 
+
