@@ -113,6 +113,11 @@ async function fetchLunchMajority(URL, divId) {
             lunchTime.innerHTML = `<p style="font-size: 18px"><b>Open:</b><span class="text-success"> ${todayMenu.LunchTime}</span></p>`;
             lunchDiv.appendChild(lunchTime);
             let count = 1;
+            if (divId === 'artebia-menu') {
+                // Remove first two items from the array
+                todayMenu.SetMenus.shift();
+                todayMenu.SetMenus.shift();
+            }
             for (const menu of todayMenu.SetMenus) {
                 const menuParagraph = document.createElement('p');
                 const components = menu.Components.join(', ');
@@ -131,8 +136,14 @@ async function fetchLunchMajority(URL, divId) {
                         lunchDiv.appendChild(menuParagraph);
                     }
                 } else {
-                    menuParagraph.innerHTML = `<b>${menu.Name}:</b> ${components}`;
-                    lunchDiv.appendChild(menuParagraph);
+                    if (menu.Name.includes('Veg')) {
+                        menuParagraph.innerHTML = `<b>${menu.Name}:</b> ${components}`;
+                        lunchDiv.appendChild(menuParagraph);
+                    } else {
+                        menuParagraph.innerHTML = `<b>Lunch ${count}:</b> ${components}`;
+                        lunchDiv.appendChild(menuParagraph);
+                        count++;
+                    }
                 }
             }
         } else {
@@ -187,9 +198,14 @@ async function fetchChemicumLunch() {
                 const menuParagraph = document.createElement('p');
                 const components = menu.meta[0].join(', ');
 
-                menuParagraph.innerHTML = `<b>Lunch ${count}: </b>${menu.name}, (${components})`;
-                lunchDiv.appendChild(menuParagraph);
-                count++;
+                if (menu.price.name.includes('Veg')) {
+                    menuParagraph.innerHTML = `<b>Vegan lunch: </b>${menu.name}, (${components})`;
+                    lunchDiv.appendChild(menuParagraph);
+                } else {
+                    menuParagraph.innerHTML = `<b>Lunch ${count}: </b>${menu.name}, (${components})`;
+                    lunchDiv.appendChild(menuParagraph);
+                    count++;
+                }
             }
         } else {
             lunchDiv.innerHTML = '<p>No lunch data available for today.</p>';
