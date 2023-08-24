@@ -129,9 +129,11 @@ async function fetchLunchMajority(URL, divId) {
                 todayMenu.SetMenus.shift();
             }
             for (const menu of todayMenu.SetMenus) {
+                if (menu.Name === null) {
+                    menu.Name = 'Lunch';
+                }
                 const menuParagraph = document.createElement('p');
                 const components = menu.Components.join(', ');
-
                 // Add the menu name to the paragraph for DIAK
                 if (divId === 'diak-menu') {
                     const menuName = menu.Name;
