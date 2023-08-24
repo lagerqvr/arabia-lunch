@@ -7,4 +7,4 @@ Built with Vanilla JS and Bootstrap.
 
 App icon:
 
-<img src="https://github.com/lagerqvr/arabia-lunch/assets/5682399/5911a652-2e6a-403e-9960-ff2f48fa3356" alt="alt text" width="250" height="250">
+<img src="https://github.com/lagerqvr/arabia-lunch/assets/5682399/bca3f0b2-de5c-48ec-9160-cb44d5f1bb89" alt="alt text" width="250" height="250">
