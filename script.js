@@ -115,16 +115,79 @@ async function fetchLunchMajority(URL, divId) {
         const isWeekend = (day === 'Sat' || day === 'Sun');
 
         if (todayMenu && todayMenu.SetMenus && !isWeekend) {
-            const lunchTime = document.createElement('p');
+            const lunchTime = document.createElement('div');
             switch (lunchDiv.id) {
                 case 'arcada-menu':
-                    lunchTime.innerHTML = `<p style="font-size: 18px"><b>Open:</b><span class="text-success"> ${todayMenu.LunchTime}</span> - <a style="text-decoration: none;" class="text-primary" href="https://www.compass-group.fi/ravintolat-ja-ruokalistat/foodco/kaupungit/helsinki/arcada/">Full menu</a></p>`;
+                    lunchTime.innerHTML = `<div class="row d-flex justify-content-between">
+            <div class="col-8">
+                <p style="font-size: 17px"><b>Open today:</b><span
+                        class="text-success"> 
+                        ${todayMenu.LunchTime}</span>
+                </p>
+            </div>
+            <div class="col-4 d-flex justify-content-end">
+                <a style="text-decoration: none;" class="text-primary-emphasis menu-link"
+                    href="https://www.compass-group.fi/ravintolat-ja-ruokalistat/foodco/kaupungit/helsinki/arcada/">Menu link
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                        fill="currentColor"
+                        class="bi bi-box-arrow-up-right mb-1 ml-1"
+                        viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                            d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z" />
+                        <path fill-rule="evenodd"
+                            d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z" />
+                    </svg>
+                </a>
+            </div>
+        </div>`;
                     break;
                 case 'diak-menu':
-                    lunchTime.innerHTML = `<p style="font-size: 18px"><b>Open:</b><span class="text-success"> ${todayMenu.LunchTime}</span> - <a style="text-decoration: none;" class="text-primary" href="https://www.compass-group.fi/ravintolat-ja-ruokalistat/foodco/kaupungit/helsinki/diak-kalasatama/">Full menu</a></p>`;
+                    lunchTime.innerHTML = `<div class="row d-flex justify-content-between">
+            <div class="col-8">
+                <p style="font-size: 17px"><b>Open today:</b><span
+                        class="text-success"> 
+                        ${todayMenu.LunchTime}</span>
+                </p>
+            </div>
+            <div class="col-4 d-flex justify-content-end">
+                <a style="text-decoration: none;" class="text-primary-emphasis menu-link"
+                    href="https://www.compass-group.fi/ravintolat-ja-ruokalistat/foodco/kaupungit/helsinki/diak-kalasatama/">Menu link
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                        fill="currentColor"
+                        class="bi bi-box-arrow-up-right mb-1 ml-1"
+                        viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                            d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z" />
+                        <path fill-rule="evenodd"
+                            d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z" />
+                    </svg>
+                </a>
+            </div>
+        </div>`;
                     break;
                 case 'artebia-menu':
-                    lunchTime.innerHTML = `<p style="font-size: 18px"><b>Open:</b><span class="text-success"> ${todayMenu.LunchTime}</span> - <a style="text-decoration: none;" class="text-primary" href="https://www.compass-group.fi/ravintolat-ja-ruokalistat/foodco/kaupungit/helsinki/arabianranta/">Full menu</a></p>`;
+                    lunchTime.innerHTML = `<div class="row d-flex justify-content-between">
+            <div class="col-8">
+                <p style="font-size: 17px"><b>Open today:</b><span
+                        class="text-success"> 
+                        ${todayMenu.LunchTime}</span>
+                </p>
+            </div>
+            <div class="col-4 d-flex justify-content-end">
+                <a style="text-decoration: none;" class="text-primary-emphasis menu-link"
+                    href="https://www.compass-group.fi/ravintolat-ja-ruokalistat/foodco/kaupungit/helsinki/arabianranta/">Menu link
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                        fill="currentColor"
+                        class="bi bi-box-arrow-up-right mb-1 ml-1"
+                        viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                            d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z" />
+                        <path fill-rule="evenodd"
+                            d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z" />
+                    </svg>
+                </a>
+            </div>
+        </div>`;
                     break;
             }
             lunchDiv.appendChild(lunchTime);
@@ -209,8 +272,29 @@ async function fetchChemicumLunch() {
         const isWeekend = (day === 'Sat' || day === 'Sun');
 
         if (todayMenu && !isWeekend) {
-            const lunchTime = document.createElement('p');
-            lunchTime.innerHTML = `<p style="font-size: 18px"><b>Open:</b><span class="text-success"> ${lunchData.menuData.visitingHours.lounas.items[0].hours}</span> - <a style="text-decoration: none;" class="text-primary" href="https://unicafe.fi/en/restaurants/chemicum/">Full menu</a></p>`;
+            const lunchTime = document.createElement('div');
+            lunchTime.innerHTML = `<div class="row d-flex justify-content-between">
+            <div class="col-8">
+                <p style="font-size: 17px"><b>Open today:</b><span
+                        class="text-success"> 
+                        ${lunchData.menuData.visitingHours.lounas.items[0].hours}</span>
+                </p>
+            </div>
+            <div class="col-4 d-flex justify-content-end">
+                <a style="text-decoration: none;" class="text-primary-emphasis menu-link"
+                    href="https://unicafe.fi/en/restaurants/chemicum/">Menu link
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                        fill="currentColor"
+                        class="bi bi-box-arrow-up-right mb-1 ml-1"
+                        viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                            d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z" />
+                        <path fill-rule="evenodd"
+                            d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z" />
+                    </svg>
+                </a>
+            </div>
+        </div>`;
             lunchDiv.appendChild(lunchTime);
             let count = 1;
             for (const menu of todayMenu.data) {

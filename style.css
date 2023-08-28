@@ -40,3 +40,7 @@ footer>a {
 #errorMsg {
     font-size: 14px;
 }
+
+.menu-link {
+    padding-top: 2px;
+}
