@@ -108,7 +108,13 @@ async function fetchLunchMajority(URL, divId) {
         const today = new Date().toISOString().split('T')[0] + 'T00:00:00+00:00';
         const todayMenu = data.MenusForDays.find(dayMenu => dayMenu.Date === today);
 
-        if (todayMenu && todayMenu.SetMenus) {
+        // Find current weekday
+        const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const currentDate = new Date();
+        const day = daysOfWeek[currentDate.getDay()];
+        const isWeekend = (day === 'Sat' || day === 'Sun');
+
+        if (todayMenu && todayMenu.SetMenus && !isWeekend) {
             const lunchTime = document.createElement('p');
             switch (lunchDiv.id) {
                 case 'arcada-menu':
@@ -200,8 +206,9 @@ async function fetchChemicumLunch() {
 
         // Get the div where you want to display the data
         const lunchDiv = document.getElementById('chemicum-menu');
+        const isWeekend = (day === 'Sat' || day === 'Sun');
 
-        if (todayMenu) {
+        if (todayMenu && !isWeekend) {
             const lunchTime = document.createElement('p');
             lunchTime.innerHTML = `<p style="font-size: 18px"><b>Open:</b><span class="text-success"> ${lunchData.menuData.visitingHours.lounas.items[0].hours}</span> - <a style="text-decoration: none;" class="text-primary" href="https://unicafe.fi/en/restaurants/chemicum/">Full menu</a></p>`;
             lunchDiv.appendChild(lunchTime);
