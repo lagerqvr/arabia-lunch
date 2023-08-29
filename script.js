@@ -103,6 +103,7 @@ async function fetchLunchMajority(URL, divId) {
 
         // Get the div where you want to display the data
         const lunchDiv = document.getElementById(divId);
+        lunchDiv.innerHTML = '';
 
         // Find today's lunch menu
         const today = new Date().toISOString().split('T')[0] + 'T00:00:00+00:00';
@@ -321,6 +322,27 @@ async function fetchChemicumLunch() {
         console.error('An error occurred:', error);
     }
 };
+
+const arcada = document.getElementById('arcada');
+const diak = document.getElementById('diak');
+const artebia = document.getElementById('artebia');
+const chemicum = document.getElementById('chemicum');
+
+arcada.addEventListener('click', function () {
+    fetchLunchMajority('https://www.compass-group.fi/menuapi/feed/json?costNumber=3003&language=en', 'arcada-menu');
+});
+
+diak.addEventListener('click', function () {
+    fetchLunchMajority('https://www.compass-group.fi/menuapi/feed/json?costNumber=3104&language=en', 'diak-menu');
+});
+
+artebia.addEventListener('click', function () {
+    fetchLunchMajority('https://www.compass-group.fi/menuapi/feed/json?costNumber=1256&language=en', 'artebia-menu');
+});
+
+chemicum.addEventListener('click', function () {
+    fetchChemicumLunch();
+});
 
 // Call the async function to fetch and display the food menu
 fetchLunchMajority('https://www.compass-group.fi/menuapi/feed/json?costNumber=3003&language=en', 'arcada-menu');
