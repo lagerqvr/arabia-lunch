@@ -270,6 +270,8 @@ async function fetchChemicumLunch() {
 
         // Get the div where you want to display the data
         const lunchDiv = document.getElementById('chemicum-menu');
+        lunchDiv.innerHTML = '';
+
         const isWeekend = (day === 'Sat' || day === 'Sun');
 
         if (todayMenu && !isWeekend) {
