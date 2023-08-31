@@ -5,6 +5,28 @@ const dark_icon = `<svg class="MuiSvgIcon-root" width="25" height="25" fill="cur
 // Element for theme toggle
 const togglerdiv = document.querySelector('#toggler-div');
 
+// Get the user's preferred language
+const chosenLang = localStorage.getItem('selected-language') || 'en';
+
+// JavaScript function to set language
+document.addEventListener('DOMContentLoaded', () => {
+    const dropdownItems = document.querySelectorAll('.dropdown-item');
+
+    dropdownItems.forEach(item => {
+        item.addEventListener('click', function (event) {
+            event.preventDefault();
+            const lang = this.getAttribute('data-lang');
+            localStorage.setItem('selected-language', lang);
+
+            // Reload all menus
+            fetchLunchMajority(`https://www.compass-group.fi/menuapi/feed/json?costNumber=3003&language=${lang}`, 'arcada-menu');
+            fetchLunchMajority(`https://www.compass-group.fi/menuapi/feed/json?costNumber=3104&language=${lang}`, 'diak-menu');
+            fetchLunchMajority(`https://www.compass-group.fi/menuapi/feed/json?costNumber=1256&language=${lang}`, 'artebia-menu');
+            fetchChemicumLunch();
+        });
+    });
+});
+
 // Function to set the theme icon and data-bs-theme attribute based on user preference or stored theme
 const checkTheme = () => {
     try {
@@ -79,12 +101,18 @@ const outputError = (input) => {
     }
 };
 
+let fullURL;
+
 // Function to fetch and display the lunch for the specific day from Arcada, Diak and Artebia 135
 async function fetchLunchMajority(URL, divId) {
     try {
         // Proxy URL to bypass CORS
         const proxyURL = 'https://corsproxy.io/?'
-        const fullURL = proxyURL + URL;
+        fullURL = proxyURL + URL;
+
+        if (divId === 'artebia-menu' && localStorage.getItem('selected-language') === 'sv-FI') {
+            fullURL = proxyURL + `https://www.compass-group.fi/menuapi/feed/json?costNumber=1256&language=en`;
+        };
 
         // Fetch the JSON content
         const response = await fetch(fullURL, {
@@ -94,12 +122,8 @@ async function fetchLunchMajority(URL, divId) {
             },
         });
 
-        // Log the response status code
-        // console.log('Response status code:', response.status);
-        // outputError('Response status code: ' + response.status);
-
+        // Convert the response to JSON
         const data = await response.json();
-        // console.log('Fetched data:', data);
 
         // Get the div where you want to display the data
         const lunchDiv = document.getElementById(divId);
@@ -192,7 +216,6 @@ async function fetchLunchMajority(URL, divId) {
                     break;
             }
             lunchDiv.appendChild(lunchTime);
-            let count = 1;
             if (divId === 'artebia-menu') {
                 // Remove first two items from the array
                 todayMenu.SetMenus.shift();
@@ -202,31 +225,17 @@ async function fetchLunchMajority(URL, divId) {
                 if (menu.Name === null) {
                     menu.Name = 'Lunch';
                 }
+
+                if (divId === 'diak-menu') {
+                    const originalName = menu.Name;
+                    const cleanedName = originalName.replace(/ [\d,/. €]+/g, '');
+                    menu.Name = cleanedName;
+                }
                 const menuParagraph = document.createElement('p');
                 const components = menu.Components.join(', ');
-                // Add the menu name to the paragraph for DIAK
-                if (divId === 'diak-menu') {
-                    const menuName = menu.Name;
-                    const trimmedMenuName = menuName.split(' ')[0]; // Get the first word "Vegetable"
-                    const updatedMenuName = trimmedMenuName + " lunch";
-                    if (updatedMenuName === 'Lunch lunch') {
-                        menuParagraph.innerHTML = `<b>Lunch ${count}:</b> ${components}`;
-                        lunchDiv.appendChild(menuParagraph);
-                        count++;
-                    } else {
-                        menuParagraph.innerHTML = `<b>${updatedMenuName}:</b> ${components}`;
-                        lunchDiv.appendChild(menuParagraph);
-                    }
-                } else {
-                    if (menu.Name.includes('Veg')) {
-                        menuParagraph.innerHTML = `<b>${menu.Name}:</b> ${components}`;
-                        lunchDiv.appendChild(menuParagraph);
-                    } else {
-                        menuParagraph.innerHTML = `<b>Lunch ${count}:</b> ${components}`;
-                        lunchDiv.appendChild(menuParagraph);
-                        count++;
-                    }
-                }
+
+                menuParagraph.innerHTML = `<b>${menu.Name}:</b> ${components}`;
+                lunchDiv.appendChild(menuParagraph);
             }
         } else {
             lunchDiv.innerHTML = '<p>No lunch data available for today.</p>';
@@ -242,9 +251,16 @@ async function fetchLunchMajority(URL, divId) {
 // Function to fetch and display the lunch for the specific day from Chemicum
 async function fetchChemicumLunch() {
     try {
+        // Get the updated preferred language
+        const currentLang = localStorage.getItem('selected-language') || 'en';
+
         // Proxy URL to bypass CORS
         const proxyURL = 'https://corsproxy.io/?'
-        const fullURL = proxyURL + 'https://unicafe.fi/wp-json/swiss/v1/restaurants?lang=en';
+        fullURL = proxyURL + `https://unicafe.fi/wp-json/swiss/v1/restaurants?lang=${currentLang}`;
+
+        if (localStorage.getItem('selected-language') === 'sv-FI') {
+            fullURL = proxyURL + `https://unicafe.fi/wp-json/swiss/v1/restaurants?lang=sv`;
+        }
 
         // Fetch the JSON content
         const response = await fetch(fullURL, {
@@ -253,20 +269,21 @@ async function fetchChemicumLunch() {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
         });
-        const data = await response.json();
-        // console.log('Fetched data:', data);
 
+        // Convert the response to JSON
+        const data = await response.json();
+
+        // Find Chemicum lunch data
         const lunchData = data.find(data => data.title === 'Chemicum');
 
         // Find today's lunch menu
         const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
         const currentDate = new Date();
         const day = daysOfWeek[currentDate.getDay()];
-        const todayFormatted = `${day} ${currentDate.getDate().toString().padStart(2, '0')}.${(currentDate.getMonth() + 1).toString().padStart(2, '0')}.`;
+        const todayFormatted = `${currentDate.getDate().toString().padStart(2, '0')}.${(currentDate.getMonth() + 1).toString().padStart(2, '0')}.`;
 
         // Match todays date with the date in the fetched data
-        const todayMenu = lunchData.menuData.menus.find(menus => menus.date === todayFormatted);
-        // console.log('Today\'s menu:', todayMenu);
+        const todayMenu = lunchData.menuData.menus.find(menus => menus.date.split(' ')[1] === todayFormatted);
 
         // Get the div where you want to display the data
         const lunchDiv = document.getElementById('chemicum-menu');
@@ -299,19 +316,12 @@ async function fetchChemicumLunch() {
             </div>
         </div>`;
             lunchDiv.appendChild(lunchTime);
-            let count = 1;
             for (const menu of todayMenu.data) {
                 const menuParagraph = document.createElement('p');
                 const components = menu.meta[0].join(', ');
 
-                if (menu.price.name.includes('Veg')) {
-                    menuParagraph.innerHTML = `<b>Vegan lunch: </b>${menu.name}, (${components})`;
-                    lunchDiv.appendChild(menuParagraph);
-                } else {
-                    menuParagraph.innerHTML = `<b>Lunch ${count}: </b>${menu.name}, (${components})`;
-                    lunchDiv.appendChild(menuParagraph);
-                    count++;
-                }
+                menuParagraph.innerHTML = `<b>${menu.price.name}: </b>${menu.name}, (${components})`;
+                lunchDiv.appendChild(menuParagraph);
             }
         } else {
             lunchDiv.innerHTML = '<p>No lunch data available for today.</p>';
@@ -331,15 +341,15 @@ const artebia = document.getElementById('artebia');
 const chemicum = document.getElementById('chemicum');
 
 arcada.addEventListener('click', function () {
-    fetchLunchMajority('https://www.compass-group.fi/menuapi/feed/json?costNumber=3003&language=en', 'arcada-menu');
+    fetchLunchMajority(`https://www.compass-group.fi/menuapi/feed/json?costNumber=3003&language=${localStorage.getItem('selected-language') || 'en'}`, 'arcada-menu');
 });
 
 diak.addEventListener('click', function () {
-    fetchLunchMajority('https://www.compass-group.fi/menuapi/feed/json?costNumber=3104&language=en', 'diak-menu');
+    fetchLunchMajority(`https://www.compass-group.fi/menuapi/feed/json?costNumber=3104&language=${localStorage.getItem('selected-language') || 'en'}`, 'diak-menu');
 });
 
 artebia.addEventListener('click', function () {
-    fetchLunchMajority('https://www.compass-group.fi/menuapi/feed/json?costNumber=1256&language=en', 'artebia-menu');
+    fetchLunchMajority(`https://www.compass-group.fi/menuapi/feed/json?costNumber=1256&language=${localStorage.getItem('selected-language') || 'en'}`, 'artebia-menu');
 });
 
 chemicum.addEventListener('click', function () {
@@ -347,7 +357,7 @@ chemicum.addEventListener('click', function () {
 });
 
 // Call the async function to fetch and display the food menu
-fetchLunchMajority('https://www.compass-group.fi/menuapi/feed/json?costNumber=3003&language=en', 'arcada-menu');
-fetchLunchMajority('https://www.compass-group.fi/menuapi/feed/json?costNumber=3104&language=en', 'diak-menu');
-fetchLunchMajority('https://www.compass-group.fi/menuapi/feed/json?costNumber=1256&language=en', 'artebia-menu');
+fetchLunchMajority(`https://www.compass-group.fi/menuapi/feed/json?costNumber=3003&language=${chosenLang}`, 'arcada-menu');
+fetchLunchMajority(`https://www.compass-group.fi/menuapi/feed/json?costNumber=3104&language=${chosenLang}`, 'diak-menu');
+fetchLunchMajority(`https://www.compass-group.fi/menuapi/feed/json?costNumber=1256&language=${chosenLang}`, 'artebia-menu');
 fetchChemicumLunch();
