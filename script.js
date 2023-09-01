@@ -361,7 +361,7 @@ async function fetchChemicumLunch() {
             menuLinkTxt = 'Full meny';
         } else {
             openTxt = 'Avoinna:';
-            menuLinkTxt = 'Koko menu';
+            menuLinkTxt = 'Menu';
         }
 
         // Get the div where you want to display the data
