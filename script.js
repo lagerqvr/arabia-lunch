@@ -188,7 +188,7 @@ async function fetchLunchMajority(URL, divId) {
             menuLinkTxt = 'Full meny';
         } else {
             openTxt = 'Avoinna:';
-            menuLinkTxt = 'Koko menu';
+            menuLinkTxt = 'Menu';
         }
 
         // Find today's lunch menu
