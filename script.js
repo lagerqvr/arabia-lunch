@@ -187,7 +187,7 @@ async function fetchLunchMajority(URL, divId) {
             openTxt = 'Öppet idag:';
             menuLinkTxt = 'Full meny';
         } else {
-            openTxt = 'Auki tänään:';
+            openTxt = 'Avoinna:';
             menuLinkTxt = 'Koko menu';
         }
 
@@ -360,7 +360,7 @@ async function fetchChemicumLunch() {
             openTxt = 'Öppet idag:';
             menuLinkTxt = 'Full meny';
         } else {
-            openTxt = 'Auki tänään:';
+            openTxt = 'Avoinna:';
             menuLinkTxt = 'Koko menu';
         }
 
