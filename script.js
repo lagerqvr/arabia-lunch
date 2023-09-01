@@ -10,12 +10,46 @@ const chosenLang = localStorage.getItem('selected-language') || 'en';
 
 // JavaScript function to set language
 document.addEventListener('DOMContentLoaded', () => {
+    setLanguage();
+});
+
+if (chosenLang === 'en') {
+    document.querySelector('#lunchline').innerHTML = 'One place for all your lunchlist needs.';
+    document.querySelector('#lang-btn').innerHTML = 'Language';
+    document.querySelectorAll('.lang-reminder').innerHTML = 'Not all languages are available for all restaurants';
+} else if (chosenLang === 'sv-FI') {
+    document.querySelector('#lunchline').innerHTML = 'En plats för alla dina lunchmenyer.'
+    document.querySelector('#lang-btn').innerHTML = 'Språk';
+    document.querySelectorAll('.lang-reminder').innerHTML = 'Alla språk är inte tillgängliga för alla restauranger';
+} else {
+    document.querySelector('#lunchline').innerHTML = 'Kaikki lounaslistat yhdessä paikassa.'
+    document.querySelector('#lang-btn').innerHTML = 'Kieli';
+    document.querySelectorAll('.lang-reminder').innerHTML = 'Kaikkia kieliä ei ole saatavilla kaikissa ravintoloissa';
+};
+
+// Function to set language
+const setLanguage = () => {
     const dropdownItems = document.querySelectorAll('.dropdown-item');
 
     dropdownItems.forEach(item => {
         item.addEventListener('click', function (event) {
             event.preventDefault();
+            getDate(); // Update the date
             const lang = this.getAttribute('data-lang');
+
+            if (lang === 'en') {
+                document.querySelector('#lunchline').innerHTML = 'One place for all your lunchlist needs.';
+                document.querySelector('#lang-btn').innerHTML = 'Language';
+                document.querySelectorAll('.lang-reminder').innerHTML = 'Not all languages are available for all restaurants';
+            } else if (lang === 'sv-FI') {
+                document.querySelector('#lunchline').innerHTML = 'En plats för alla dina lunchmenyer.'
+                document.querySelector('#lang-btn').innerHTML = 'Språk';
+                document.querySelectorAll('.lang-reminder').innerHTML = 'Alla språk är inte tillgängliga för alla restauranger';
+            } else {
+                document.querySelector('#lunchline').innerHTML = 'Kaikki lounaslistat yhdessä paikassa.'
+                document.querySelector('#lang-btn').innerHTML = 'Kieli';
+                document.querySelectorAll('.lang-reminder').innerHTML = 'Kaikkia kieliä ei ole saatavilla kaikissa ravintoloissa';
+            }
             localStorage.setItem('selected-language', lang);
 
             // Reload all menus
@@ -25,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
             fetchChemicumLunch();
         });
     });
-});
+};
 
 // Function to set the theme icon and data-bs-theme attribute based on user preference or stored theme
 const checkTheme = () => {
@@ -127,7 +161,35 @@ async function fetchLunchMajority(URL, divId) {
 
         // Get the div where you want to display the data
         const lunchDiv = document.getElementById(divId);
+        const reminderNotes = document.querySelectorAll('.lang-reminder');
         lunchDiv.innerHTML = '';
+
+        // Get the updated preferred language
+        let openTxt;
+        let menuLinkTxt;
+
+        const lang = localStorage.getItem('selected-language');
+
+        reminderNotes.forEach((reminderNotes) => {
+            if (lang === 'en') {
+                reminderNotes.innerHTML = 'Not all languages are available for all restaurants';
+            } else if (lang === 'sv-FI') {
+                reminderNotes.innerHTML = 'Alla språk är inte tillgängliga för alla restauranger';
+            } else {
+                reminderNotes.innerHTML = 'Kaikkia kieliä ei ole saatavilla kaikissa ravintoloissa';
+            }
+        });
+
+        if (lang === 'en') {
+            openTxt = 'Open today:';
+            menuLinkTxt = 'Menu link';
+        } else if (lang === 'sv-FI') {
+            openTxt = 'Öppet idag:';
+            menuLinkTxt = 'Full meny';
+        } else {
+            openTxt = 'Auki tänään:';
+            menuLinkTxt = 'Koko menu';
+        }
 
         // Find today's lunch menu
         const today = new Date().toISOString().split('T')[0] + 'T00:00:00+00:00';
@@ -145,14 +207,14 @@ async function fetchLunchMajority(URL, divId) {
                 case 'arcada-menu':
                     lunchTime.innerHTML = `<div class="row d-flex justify-content-between">
             <div class="col-8">
-                <p style="font-size: 17px"><b>Open today:</b><span
+                <p style="font-size: 17px"><b>${openTxt}</b><span
                         class="text-success"> 
                         ${todayMenu.LunchTime}</span>
                 </p>
             </div>
             <div class="col-4 d-flex justify-content-end">
                 <a style="text-decoration: none;" class="text-primary-emphasis menu-link"
-                    href="https://www.compass-group.fi/ravintolat-ja-ruokalistat/foodco/kaupungit/helsinki/arcada/">Menu link
+                    href="https://www.compass-group.fi/ravintolat-ja-ruokalistat/foodco/kaupungit/helsinki/arcada/">${menuLinkTxt}
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                         fill="currentColor"
                         class="bi bi-box-arrow-up-right mb-1 ml-1"
@@ -169,14 +231,14 @@ async function fetchLunchMajority(URL, divId) {
                 case 'diak-menu':
                     lunchTime.innerHTML = `<div class="row d-flex justify-content-between">
             <div class="col-8">
-                <p style="font-size: 17px"><b>Open today:</b><span
+                <p style="font-size: 17px"><b>${openTxt}</b><span
                         class="text-success"> 
                         ${todayMenu.LunchTime}</span>
                 </p>
             </div>
             <div class="col-4 d-flex justify-content-end">
                 <a style="text-decoration: none;" class="text-primary-emphasis menu-link"
-                    href="https://www.compass-group.fi/ravintolat-ja-ruokalistat/foodco/kaupungit/helsinki/diak-kalasatama/">Menu link
+                    href="https://www.compass-group.fi/ravintolat-ja-ruokalistat/foodco/kaupungit/helsinki/diak-kalasatama/">${menuLinkTxt}
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                         fill="currentColor"
                         class="bi bi-box-arrow-up-right mb-1 ml-1"
@@ -193,14 +255,14 @@ async function fetchLunchMajority(URL, divId) {
                 case 'artebia-menu':
                     lunchTime.innerHTML = `<div class="row d-flex justify-content-between">
             <div class="col-8">
-                <p style="font-size: 17px"><b>Open today:</b><span
+                <p style="font-size: 17px"><b>${openTxt}</b><span
                         class="text-success"> 
                         ${todayMenu.LunchTime}</span>
                 </p>
             </div>
             <div class="col-4 d-flex justify-content-end">
                 <a style="text-decoration: none;" class="text-primary-emphasis menu-link"
-                    href="https://www.compass-group.fi/ravintolat-ja-ruokalistat/foodco/kaupungit/helsinki/arabianranta/">Menu link
+                    href="https://www.compass-group.fi/ravintolat-ja-ruokalistat/foodco/kaupungit/helsinki/arabianranta/">${menuLinkTxt}
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                         fill="currentColor"
                         class="bi bi-box-arrow-up-right mb-1 ml-1"
@@ -285,6 +347,23 @@ async function fetchChemicumLunch() {
         // Match todays date with the date in the fetched data
         const todayMenu = lunchData.menuData.menus.find(menus => menus.date.split(' ')[1] === todayFormatted);
 
+        // Get the updated preferred language
+        let openTxt;
+        let menuLinkTxt;
+
+        const lang = localStorage.getItem('selected-language');
+
+        if (lang === 'en') {
+            openTxt = 'Open today:';
+            menuLinkTxt = 'Menu link';
+        } else if (lang === 'sv-FI') {
+            openTxt = 'Öppet idag:';
+            menuLinkTxt = 'Full meny';
+        } else {
+            openTxt = 'Auki tänään:';
+            menuLinkTxt = 'Koko menu';
+        }
+
         // Get the div where you want to display the data
         const lunchDiv = document.getElementById('chemicum-menu');
         lunchDiv.innerHTML = '';
@@ -295,14 +374,14 @@ async function fetchChemicumLunch() {
             const lunchTime = document.createElement('div');
             lunchTime.innerHTML = `<div class="row d-flex justify-content-between">
             <div class="col-8">
-                <p style="font-size: 17px"><b>Open today:</b><span
+                <p style="font-size: 17px"><b>${openTxt}</b><span
                         class="text-success"> 
                         ${lunchData.menuData.visitingHours.lounas.items[0].hours}</span>
                 </p>
             </div>
             <div class="col-4 d-flex justify-content-end">
                 <a style="text-decoration: none;" class="text-primary-emphasis menu-link"
-                    href="https://unicafe.fi/en/restaurants/chemicum/">Menu link
+                    href="https://unicafe.fi/en/restaurants/chemicum/">${menuLinkTxt}
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                         fill="currentColor"
                         class="bi bi-box-arrow-up-right mb-1 ml-1"
