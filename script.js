@@ -370,6 +370,18 @@ async function fetchChemicumLunch() {
             },
         });
 
+        // Check the status code
+        if (response.status === 524) {
+            if (currentLang === 'en') {
+                lunchDiv.innerHTML = "Failed to fetch lunch data.";
+            } else if (currentLang === 'sv-FI') {
+                lunchDiv.innerHTML = "Kunde inte hämta lunch data.";
+            } else {
+                lunchDiv.innerHTML = "Lounas-datan noutaminen epäonnistui.";
+            }
+            return;
+        }
+
         // Convert the response to JSON
         const data = await response.json();
 
