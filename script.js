@@ -300,7 +300,13 @@ async function fetchLunchMajority(URL, divId) {
                 lunchDiv.appendChild(menuParagraph);
             }
         } else {
-            lunchDiv.innerHTML = '<p>No lunch data available for today.</p>';
+            if (lang === 'en') {
+                lunchDiv.innerHTML = '<p>No lunch data available for today.</p>';
+            } else if (lang === 'sv-FI') {
+                lunchDiv.innerHTML = '<p>Ingen lunch-data kunde hämtas för idag.</p>';
+            } else {
+                lunchDiv.innerHTML = '<p>Lounas-dataa ei löytynyt tälle päivälle.</p>';
+            }
         }
 
     } catch (error) {
@@ -403,7 +409,13 @@ async function fetchChemicumLunch() {
                 lunchDiv.appendChild(menuParagraph);
             }
         } else {
-            lunchDiv.innerHTML = '<p>No lunch data available for today.</p>';
+            if (lang === 'en') {
+                lunchDiv.innerHTML = '<p>No lunch data available for today.</p>';
+            } else if (lang === 'sv-FI') {
+                lunchDiv.innerHTML = '<p>Ingen lunch-data kunde hämtas för idag.</p>';
+            } else {
+                lunchDiv.innerHTML = '<p>Lounas-dataa ei löytynyt tälle päivälle.</p>';
+            }
         }
 
 
