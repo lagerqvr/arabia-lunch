@@ -169,6 +169,18 @@ async function fetchLunchMajority(URL, divId) {
             },
         });
 
+        // Check the status code
+        if (response.status === 524) {
+            if (lang === 'en') {
+                lunchDiv.innerHTML = "Failed to fetch lunch data.";
+            } else if (lang === 'sv-FI') {
+                lunchDiv.innerHTML = "Kunde inte hämta lunch data.";
+            } else {
+                lunchDiv.innerHTML = "Lounas-datan noutaminen epäonnistui.";
+            }
+            return;
+        }
+
         // Convert the response to JSON
         const data = await response.json();
 
