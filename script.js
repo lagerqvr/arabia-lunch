@@ -140,6 +140,19 @@ let fullURL;
 // Function to fetch and display the lunch for the specific day from Arcada, Diak and Artebia 135
 async function fetchLunchMajority(URL, divId) {
     try {
+        // Get the div where you want to display the data and the user's preferred language
+        const lang = localStorage.getItem('selected-language');
+        const lunchDiv = document.getElementById(divId);
+
+        // Set the innerHTML to "Fetching data" before fetching
+        if (lang === 'en') {
+            lunchDiv.innerHTML = "Fetching lunch data...";
+        } else if (lang === 'sv-FI') {
+            lunchDiv.innerHTML = "Hämtar lunch-data...";
+        } else {
+            lunchDiv.innerHTML = "Noudetaan lounas-dataa...";
+        }
+
         // Proxy URL to bypass CORS
         const proxyURL = 'https://corsproxy.io/?'
         fullURL = proxyURL + URL;
@@ -159,16 +172,13 @@ async function fetchLunchMajority(URL, divId) {
         // Convert the response to JSON
         const data = await response.json();
 
-        // Get the div where you want to display the data
-        const lunchDiv = document.getElementById(divId);
+        // Get reminder notes div
         const reminderNotes = document.querySelectorAll('.lang-reminder');
         lunchDiv.innerHTML = '';
 
         // Get the updated preferred language
         let openTxt;
         let menuLinkTxt;
-
-        const lang = localStorage.getItem('selected-language');
 
         reminderNotes.forEach((reminderNotes) => {
             if (lang === 'en') {
@@ -319,8 +329,18 @@ async function fetchLunchMajority(URL, divId) {
 // Function to fetch and display the lunch for the specific day from Chemicum
 async function fetchChemicumLunch() {
     try {
-        // Get the updated preferred language
+        // Get the div where you want to display the data and the user's preferred language
         const currentLang = localStorage.getItem('selected-language') || 'en';
+        const lunchDiv = document.getElementById('chemicum-menu');
+
+        // Set the innerHTML to "Fetching data" before fetching
+        if (currentLang === 'en') {
+            lunchDiv.innerHTML = "Fetching lunch data...";
+        } else if (currentLang === 'sv-FI') {
+            lunchDiv.innerHTML = "Hämtar lunch-data...";
+        } else {
+            lunchDiv.innerHTML = "Noudetaan lounas-dataa...";
+        }
 
         // Proxy URL to bypass CORS
         const proxyURL = 'https://corsproxy.io/?'
@@ -371,7 +391,6 @@ async function fetchChemicumLunch() {
         }
 
         // Get the div where you want to display the data
-        const lunchDiv = document.getElementById('chemicum-menu');
         lunchDiv.innerHTML = '';
 
         const isWeekend = (day === 'Sat' || day === 'Sun');
