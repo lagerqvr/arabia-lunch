@@ -311,9 +311,16 @@ async function fetchLunchMajority(URL, divId) {
                 }
 
                 if (divId === 'diak-menu') {
-                    const originalName = menu.Name;
-                    const cleanedName = originalName.replace(/ [\d,/. €]+/g, '');
-                    menu.Name = cleanedName;
+                    const originalName = menu.Name.trim();
+                    let firstChar = originalName.charAt(0);
+
+                    // Check if the first character is a number
+                    if (!isNaN(firstChar)) {
+                        menu.Name = "Lunch";
+                    } else {
+                        const cleanedName = originalName.replace(/ [\d,/. €]+/g, '');
+                        menu.Name = cleanedName;
+                    }
                 }
                 const menuParagraph = document.createElement('p');
                 const components = menu.Components.join(', ');
