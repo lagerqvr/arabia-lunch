@@ -6,7 +6,12 @@ const dark_icon = `<svg class="MuiSvgIcon-root" width="25" height="25" fill="cur
 const togglerdiv = document.querySelector('#toggler-div');
 
 // Get the user's preferred language
-const chosenLang = localStorage.getItem('selected-language') || 'en';
+let chosenLang = localStorage.getItem('selected-language');
+if (chosenLang === null) {
+    chosenLang = 'en';
+    localStorage.setItem('selected-language', 'en');
+}
+
 
 // JavaScript function to set language
 document.addEventListener('DOMContentLoaded', () => {
@@ -146,11 +151,11 @@ async function fetchLunchMajority(URL, divId) {
 
         // Set the innerHTML to "Fetching data" before fetching
         if (lang === 'en') {
-            lunchDiv.innerHTML = "Fetching lunch data...";
+            lunchDiv.innerHTML = "<p>Fetching lunch data...</p>";
         } else if (lang === 'sv-FI') {
-            lunchDiv.innerHTML = "Hämtar lunch-data...";
+            lunchDiv.innerHTML = "<p>Hämtar lunch-data...</p>";
         } else {
-            lunchDiv.innerHTML = "Noudetaan lounas-dataa...";
+            lunchDiv.innerHTML = "<p>Noudetaan lounas-dataa...</p>";
         }
 
         // Proxy URL to bypass CORS
@@ -354,11 +359,11 @@ async function fetchChemicumLunch() {
 
         // Set the innerHTML to "Fetching data" before fetching
         if (currentLang === 'en') {
-            lunchDiv.innerHTML = "Fetching lunch data...";
+            lunchDiv.innerHTML = "<p>Fetching lunch data...</p>";
         } else if (currentLang === 'sv-FI') {
-            lunchDiv.innerHTML = "Hämtar lunch-data...";
+            lunchDiv.innerHTML = "<p>Hämtar lunch-data...</p>";
         } else {
-            lunchDiv.innerHTML = "Noudetaan lounas-dataa...";
+            lunchDiv.innerHTML = "<p>Noudetaan lounas-dataa...</p>";
         }
 
         // Proxy URL to bypass CORS
@@ -459,6 +464,7 @@ async function fetchChemicumLunch() {
                 lunchDiv.appendChild(menuParagraph);
             }
         } else {
+            console.log(lang);
             if (lang === 'en') {
                 lunchDiv.innerHTML = '<p>No lunch data available for today.</p>';
             } else if (lang === 'sv-FI') {
@@ -476,24 +482,19 @@ async function fetchChemicumLunch() {
     }
 };
 
-const arcada = document.getElementById('arcada');
-const diak = document.getElementById('diak');
-const artebia = document.getElementById('artebia');
-const chemicum = document.getElementById('chemicum');
-
-arcada.addEventListener('click', function () {
+document.querySelector('#collapseOne').addEventListener('show.bs.collapse', function () {
     fetchLunchMajority(`https://www.compass-group.fi/menuapi/feed/json?costNumber=3003&language=${localStorage.getItem('selected-language') || 'en'}`, 'arcada-menu');
 });
 
-diak.addEventListener('click', function () {
+document.querySelector('#collapseTwo').addEventListener('show.bs.collapse', function () {
     fetchLunchMajority(`https://www.compass-group.fi/menuapi/feed/json?costNumber=3104&language=${localStorage.getItem('selected-language') || 'en'}`, 'diak-menu');
 });
 
-artebia.addEventListener('click', function () {
+document.querySelector('#collapseThree').addEventListener('show.bs.collapse', function () {
     fetchLunchMajority(`https://www.compass-group.fi/menuapi/feed/json?costNumber=1256&language=${localStorage.getItem('selected-language') || 'en'}`, 'artebia-menu');
 });
 
-chemicum.addEventListener('click', function () {
+document.querySelector('#collapseFour').addEventListener('show.bs.collapse', function () {
     fetchChemicumLunch();
 });
 
