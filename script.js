@@ -464,7 +464,6 @@ async function fetchChemicumLunch() {
                 lunchDiv.appendChild(menuParagraph);
             }
         } else {
-            console.log(lang);
             if (lang === 'en') {
                 lunchDiv.innerHTML = '<p>No lunch data available for today.</p>';
             } else if (lang === 'sv-FI') {
