@@ -122,13 +122,72 @@ const getDate = () => {
         const month = date.getMonth() + 1; // Months are zero-based
         const year = date.getFullYear();
         const formattedDate = `${day}.${month}.${year}`;
-        document.querySelector('.currentDate').innerHTML = '<i class="bi bi-arrow-left date-selector" onClick="lastDay()"></i> ' + formattedDate + ' <i class="bi bi-arrow-right date-selector" onclick="nextDay()"></i>';
+        document.querySelector('.currentDate').innerHTML = '<i class="bi bi-arrow-left date-selector date-previous" onClick="changeDay()"></i> ' + formattedDate + ' <i class="bi bi-arrow-right date-selector date-next" onclick="changeDay()"></i>';
     } catch (error) {
         outputError(error.message + ` (${error.stack})`);
         console.log(error.message);
     }
 };
 getDate();
+
+// Function to initialize the date
+let currentDate;
+
+function initializeDate() {
+    try {
+        // Retrieve the date from localStorage
+        const savedDate = localStorage.getItem('currentDate');
+
+        if (savedDate) {
+            currentDate = new Date(savedDate);
+        } else {
+            currentDate = new Date(); // If no date in localStorage, use today's date
+        }
+
+        updateDate();
+    } catch (error) {
+        outputError(error.message + ` (${error.stack})`);
+        console.log(error.message);
+    }
+};
+
+function updateDate() {
+    try {
+        // Format the date
+        const formattedDate = currentDate.getDate() + '.' + (currentDate.getMonth() + 1) + '.' + currentDate.getFullYear();
+
+        // Update the DOM
+        document.querySelector('.currentDate').innerHTML = '<i class="bi bi-arrow-left date-selector date-previous" onclick="changeDay(-1)"></i> ' + formattedDate + ' <i class="bi bi-arrow-right date-selector date-next" onclick="changeDay(1)"></i>';
+
+        // Save the new date in localStorage
+        localStorage.setItem('currentDate', currentDate);
+    } catch (error) {
+        outputError(error.message + ` (${error.stack})`);
+        console.log(error.message);
+    }
+};
+
+function changeDay(delta) {
+    try {
+        // Change the date by adding/subtracting days
+        currentDate.setDate(currentDate.getDate() + delta);
+
+        // Update the date in DOM, menus and localStorage
+        updateDate();
+        fetchLunchMajority(`https://www.compass-group.fi/menuapi/feed/json?costNumber=3003&language=${chosenLang}`, 'arcada-menu');
+        fetchLunchMajority(`https://www.compass-group.fi/menuapi/feed/json?costNumber=3104&language=${chosenLang}`, 'diak-menu');
+        fetchLunchMajority(`https://www.compass-group.fi/menuapi/feed/json?costNumber=1256&language=${chosenLang}`, 'artebia-menu');
+        fetchChemicumLunch();
+    } catch (error) {
+        outputError(error.message + ` (${error.stack})`);
+        console.log(error.message);
+    }
+};
+
+// Initialize the date when the page loads
+window.addEventListener('DOMContentLoaded', (event) => {
+    initializeDate();
+});
 
 // Log result to application log
 const outputError = (input) => {
@@ -218,15 +277,20 @@ async function fetchLunchMajority(URL, divId) {
             menuLinkTxt = 'Menu';
         }
 
+        // Initialize the date when the page loads or read it from localStorage
+        initializeDate();
+
+        // Convert currentDate to the ISO format used by data.MenusForDays
+        const isoDate = currentDate.toISOString().split('T')[0] + 'T00:00:00+00:00';
+
         // Find today's lunch menu
-        const today = new Date().toISOString().split('T')[0] + 'T00:00:00+00:00';
-        const todayMenu = data.MenusForDays.find(dayMenu => dayMenu.Date === today);
+        const todayMenu = data.MenusForDays.find(dayMenu => dayMenu.Date === isoDate);
 
         // Find current weekday
         const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-        const currentDate = new Date();
         const day = daysOfWeek[currentDate.getDay()];
         const isWeekend = (day === 'Sat' || day === 'Sun');
+
 
         if (todayMenu && todayMenu.SetMenus && !isWeekend) {
             const lunchTime = document.createElement('div');
@@ -335,11 +399,11 @@ async function fetchLunchMajority(URL, divId) {
             }
         } else {
             if (lang === 'en') {
-                lunchDiv.innerHTML = '<p>No lunch data available for today.</p>';
+                lunchDiv.innerHTML = '<p>No lunch data available for the selected day.</p>';
             } else if (lang === 'sv-FI') {
-                lunchDiv.innerHTML = '<p>Ingen lunch-data kunde hämtas för idag.</p>';
+                lunchDiv.innerHTML = '<p>Ingen lunch-data kunde hämtas för dagen i frågan.</p>';
             } else {
-                lunchDiv.innerHTML = '<p>Lounas-dataa ei löytynyt tälle päivälle.</p>';
+                lunchDiv.innerHTML = '<p>Lounas-dataa ei löytynyt kyseiselle päivälle.</p>';
             }
         }
 
@@ -400,13 +464,17 @@ async function fetchChemicumLunch() {
         // Find Chemicum lunch data
         const lunchData = data.find(data => data.title === 'Chemicum');
 
+        // Initialize the date when the page loads or read it from localStorage
+        initializeDate();
+
         // Find today's lunch menu
         const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-        const currentDate = new Date();
         const day = daysOfWeek[currentDate.getDay()];
+
+        // Convert currentDate to the format used in lunchData.menuData.menus
         const todayFormatted = `${currentDate.getDate().toString().padStart(2, '0')}.${(currentDate.getMonth() + 1).toString().padStart(2, '0')}.`;
 
-        // Match todays date with the date in the fetched data
+        // Match today's date with the date in the fetched data
         const todayMenu = lunchData.menuData.menus.find(menus => menus.date.split(' ')[1] === todayFormatted);
 
         // Get the updated preferred language
@@ -465,11 +533,11 @@ async function fetchChemicumLunch() {
             }
         } else {
             if (lang === 'en') {
-                lunchDiv.innerHTML = '<p>No lunch data available for today.</p>';
+                lunchDiv.innerHTML = '<p>No lunch data available for the selected day.</p>';
             } else if (lang === 'sv-FI') {
-                lunchDiv.innerHTML = '<p>Ingen lunch-data kunde hämtas för idag.</p>';
+                lunchDiv.innerHTML = '<p>Ingen lunch-data kunde hämtas för dagen i frågan.</p>';
             } else {
-                lunchDiv.innerHTML = '<p>Lounas-dataa ei löytynyt tälle päivälle.</p>';
+                lunchDiv.innerHTML = '<p>Lounas-dataa ei löytynyt kyseiselle päivälle.</p>';
             }
         }
 

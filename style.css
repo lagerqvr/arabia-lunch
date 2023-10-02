@@ -24,7 +24,7 @@ footer>a {
 }
 
 .currentDate {
-    font-size: calc(1rem + 0.6vw);
+    font-size: calc(0.9rem + 0.6vw);
     font-weight: 300;
     vertical-align: middle;
 }
