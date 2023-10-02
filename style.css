@@ -37,6 +37,10 @@ footer>a {
     cursor: pointer;
 }
 
+.accordion-body {
+    min-height: 300px;
+}
+
 #arcada-menu,
 #diak-menu,
 #chemicum-menu,

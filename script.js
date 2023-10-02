@@ -170,20 +170,34 @@ function updateDate() {
     }
 };
 
-function changeDay(delta) {
+let isFetching = false;
+
+async function changeDay(delta) {
+    if (isFetching) {
+        return; // Ignore clicks if already fetching
+    }
+
+    isFetching = true;
+
     try {
         // Change the date by adding/subtracting days
         currentDate.setDate(currentDate.getDate() + delta);
 
-        // Update the date in DOM, menus and localStorage
+        // Update the date in DOM and localStorage
         updateDate();
-        fetchLunchMajority(`https://www.compass-group.fi/menuapi/feed/json?costNumber=3003&language=${chosenLang}`, 'arcada-menu');
-        fetchLunchMajority(`https://www.compass-group.fi/menuapi/feed/json?costNumber=3104&language=${chosenLang}`, 'diak-menu');
-        fetchLunchMajority(`https://www.compass-group.fi/menuapi/feed/json?costNumber=1256&language=${chosenLang}`, 'artebia-menu');
-        fetchChemicumLunch();
+
+        // Await for all fetches to complete
+        await Promise.all([
+            fetchLunchMajority(`https://www.compass-group.fi/menuapi/feed/json?costNumber=3003&language=${chosenLang}`, 'arcada-menu'),
+            fetchLunchMajority(`https://www.compass-group.fi/menuapi/feed/json?costNumber=3104&language=${chosenLang}`, 'diak-menu'),
+            fetchLunchMajority(`https://www.compass-group.fi/menuapi/feed/json?costNumber=1256&language=${chosenLang}`, 'artebia-menu'),
+            fetchChemicumLunch()
+        ]);
     } catch (error) {
         outputError(error.message + ` (${error.stack})`);
         console.log(error.message);
+    } finally {
+        isFetching = false;
     }
 };
 
