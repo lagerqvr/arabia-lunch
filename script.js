@@ -39,7 +39,6 @@ const setLanguage = () => {
     dropdownItems.forEach(item => {
         item.addEventListener('click', function (event) {
             event.preventDefault();
-            getDate(); // Update the date
             const lang = this.getAttribute('data-lang');
 
             if (lang === 'en') {
@@ -113,22 +112,6 @@ const getTheme = () => {
     }
 };
 getTheme();
-
-/// Function to fetch and display current date
-const getDate = () => {
-    try {
-        const date = new Date();
-        const day = date.getDate();
-        const month = date.getMonth() + 1; // Months are zero-based
-        const year = date.getFullYear();
-        const formattedDate = `${day}.${month}.${year}`;
-        document.querySelector('.currentDate').innerHTML = '<i class="bi bi-arrow-left date-selector date-previous" onClick="changeDay()"></i> ' + formattedDate + ' <i class="bi bi-arrow-right date-selector date-next" onclick="changeDay()"></i>';
-    } catch (error) {
-        outputError(error.message + ` (${error.stack})`);
-        console.log(error.message);
-    }
-};
-getDate();
 
 // Function to initialize the date
 let currentDate;
@@ -283,14 +266,21 @@ async function fetchLunchMajority(URL, divId) {
             }
         });
 
+        let storedDateString = localStorage.getItem('currentDate');
+        let storedDate = new Date(storedDateString);
+        let today = new Date();
+
+        // Normalize the Date objects to compare only the date, not the time
+        let isToday = today.toDateString() === storedDate.toDateString();
+
         if (lang === 'en') {
-            openTxt = 'Open today:';
+            openTxt = isToday ? 'Open today:' : 'Open:';
             menuLinkTxt = 'Menu link';
         } else if (lang === 'sv-FI') {
-            openTxt = 'Öppet idag:';
+            openTxt = isToday ? 'Öppet idag:' : 'Öppet:';
             menuLinkTxt = 'Full meny';
         } else {
-            openTxt = 'Avoinna:';
+            openTxt = isToday ? 'Auki tänään:' : 'Avoinna:';
             menuLinkTxt = 'Menu';
         }
 
@@ -315,7 +305,7 @@ async function fetchLunchMajority(URL, divId) {
                 case 'arcada-menu':
                     lunchTime.innerHTML = `<div class="row d-flex justify-content-between">
             <div class="col-8">
-                <p style="font-size: 17px"><b>${openTxt}</b><span
+                <p class="openTxt"><b>${openTxt}</b><span
                         class="text-success"> 
                         ${todayMenu.LunchTime}</span>
                 </p>
@@ -323,7 +313,7 @@ async function fetchLunchMajority(URL, divId) {
             <div class="col-4 d-flex justify-content-end">
                 <a style="text-decoration: none;" class="text-primary-emphasis menu-link"
                     href="https://www.compass-group.fi/ravintolat-ja-ruokalistat/foodco/kaupungit/helsinki/arcada/">${menuLinkTxt}
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
                         fill="currentColor"
                         class="bi bi-box-arrow-up-right mb-1 ml-1"
                         viewBox="0 0 16 16">
@@ -339,7 +329,7 @@ async function fetchLunchMajority(URL, divId) {
                 case 'diak-menu':
                     lunchTime.innerHTML = `<div class="row d-flex justify-content-between">
             <div class="col-8">
-                <p style="font-size: 17px"><b>${openTxt}</b><span
+                <p class="openTxt"><b>${openTxt}</b><span
                         class="text-success"> 
                         ${todayMenu.LunchTime}</span>
                 </p>
@@ -347,7 +337,7 @@ async function fetchLunchMajority(URL, divId) {
             <div class="col-4 d-flex justify-content-end">
                 <a style="text-decoration: none;" class="text-primary-emphasis menu-link"
                     href="https://www.compass-group.fi/ravintolat-ja-ruokalistat/foodco/kaupungit/helsinki/diak-kalasatama/">${menuLinkTxt}
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
                         fill="currentColor"
                         class="bi bi-box-arrow-up-right mb-1 ml-1"
                         viewBox="0 0 16 16">
@@ -363,7 +353,7 @@ async function fetchLunchMajority(URL, divId) {
                 case 'artebia-menu':
                     lunchTime.innerHTML = `<div class="row d-flex justify-content-between">
             <div class="col-8">
-                <p style="font-size: 17px"><b>${openTxt}</b><span
+                <p class="openTxt"><b>${openTxt}</b><span
                         class="text-success"> 
                         ${todayMenu.LunchTime}</span>
                 </p>
@@ -371,7 +361,7 @@ async function fetchLunchMajority(URL, divId) {
             <div class="col-4 d-flex justify-content-end">
                 <a style="text-decoration: none;" class="text-primary-emphasis menu-link"
                     href="https://www.compass-group.fi/ravintolat-ja-ruokalistat/foodco/kaupungit/helsinki/arabianranta/">${menuLinkTxt}
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
                         fill="currentColor"
                         class="bi bi-box-arrow-up-right mb-1 ml-1"
                         viewBox="0 0 16 16">
@@ -500,14 +490,21 @@ async function fetchChemicumLunch() {
 
         const lang = localStorage.getItem('selected-language');
 
+        let storedDateString = localStorage.getItem('currentDate');
+        let storedDate = new Date(storedDateString);
+        let today = new Date();
+
+        // Normalize the Date objects to compare only the date, not the time
+        let isToday = today.toDateString() === storedDate.toDateString();
+
         if (lang === 'en') {
-            openTxt = 'Open today:';
+            openTxt = isToday ? 'Open today:' : 'Open:';
             menuLinkTxt = 'Menu link';
         } else if (lang === 'sv-FI') {
-            openTxt = 'Öppet idag:';
+            openTxt = isToday ? 'Öppet idag:' : 'Öppet:';
             menuLinkTxt = 'Full meny';
         } else {
-            openTxt = 'Avoinna:';
+            openTxt = isToday ? 'Auki tänään:' : 'Avoinna:';
             menuLinkTxt = 'Menu';
         }
 
@@ -520,7 +517,7 @@ async function fetchChemicumLunch() {
             const lunchTime = document.createElement('div');
             lunchTime.innerHTML = `<div class="row d-flex justify-content-between">
             <div class="col-8">
-                <p style="font-size: 17px"><b>${openTxt}</b><span
+                <p class="openTxt"><b>${openTxt}</b><span
                         class="text-success"> 
                         ${lunchData.menuData.visitingHours.lounas.items[0].hours}</span>
                 </p>
@@ -528,7 +525,7 @@ async function fetchChemicumLunch() {
             <div class="col-4 d-flex justify-content-end">
                 <a style="text-decoration: none;" class="text-primary-emphasis menu-link"
                     href="https://unicafe.fi/en/restaurants/chemicum/">${menuLinkTxt}
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
                         fill="currentColor"
                         class="bi bi-box-arrow-up-right mb-1 ml-1"
                         viewBox="0 0 16 16">
