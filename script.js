@@ -122,7 +122,7 @@ const getDate = () => {
         const month = date.getMonth() + 1; // Months are zero-based
         const year = date.getFullYear();
         const formattedDate = `${day}.${month}.${year}`;
-        document.querySelector('.currentDate').innerHTML = ' - ' + formattedDate;
+        document.querySelector('.currentDate').innerHTML = '<i class="bi bi-arrow-left date-selector" onClick="lastDay()"></i> ' + formattedDate + ' <i class="bi bi-arrow-right date-selector" onclick="nextDay()"></i>';
     } catch (error) {
         outputError(error.message + ` (${error.stack})`);
         console.log(error.message);

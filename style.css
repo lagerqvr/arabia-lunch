@@ -24,13 +24,17 @@ footer>a {
 }
 
 .currentDate {
-    font-size: 22px !important;
+    font-size: calc(1rem + 0.6vw);
     font-weight: 300;
     vertical-align: middle;
 }
 
 .container {
     flex: 1 0 auto;
+}
+
+.date-selector {
+    cursor: pointer;
 }
 
 #arcada-menu,
