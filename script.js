@@ -298,7 +298,6 @@ async function fetchLunchMajority(URL, divId) {
         const day = daysOfWeek[currentDate.getDay()];
         const isWeekend = (day === 'Sat' || day === 'Sun');
 
-
         if (todayMenu && todayMenu.SetMenus && !isWeekend) {
             const lunchTime = document.createElement('div');
             switch (lunchDiv.id) {
