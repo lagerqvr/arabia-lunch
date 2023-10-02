@@ -153,8 +153,11 @@ function initializeDate() {
 
 function updateDate() {
     try {
-        // Format the date
-        const formattedDate = currentDate.getDate() + '.' + (currentDate.getMonth() + 1) + '.' + currentDate.getFullYear();
+        // Format the date to DD.MM.YY
+        const day = String(currentDate.getDate()).padStart(2, '0');
+        const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+        const year = String(currentDate.getFullYear()).substring(2, 4);
+        const formattedDate = `${day}.${month}.${year}`;
 
         // Update the DOM
         document.querySelector('.currentDate').innerHTML = '<i class="bi bi-arrow-left date-selector date-previous" onclick="changeDay(-1)"></i> ' + formattedDate + ' <i class="bi bi-arrow-right date-selector date-next" onclick="changeDay(1)"></i>';
