@@ -133,7 +133,7 @@ getDate();
 // Log result to application log
 const outputError = (input) => {
     try {
-        document.querySelector("#errorMsg").innerHTML += `<p class="text-danger ml-1 mt-1 mb-0"><b>${input}</b></p>`;
+        document.querySelector("#errorMsg").innerHTML += `<div class="alert alert-danger mt-1 mb-3" role="alert">${input}</div`;
     } catch (error) {
         outputError(error.message + ` (${error.stack})`);
         console.log(error.message);
