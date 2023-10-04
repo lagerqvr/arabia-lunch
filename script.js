@@ -136,14 +136,23 @@ function initializeDate() {
 
 function updateDate() {
     try {
-        // Format the date to DD.MM.YY
+        // Get today's date for comparison
+        const today = new Date();
+        const todayDay = String(today.getDate()).padStart(2, '0');
+        const todayMonth = String(today.getMonth() + 1).padStart(2, '0');
+        const todayYear = String(today.getFullYear()).substring(2, 4);
+
+        // Format the current date to DD.MM.YY
         const day = String(currentDate.getDate()).padStart(2, '0');
         const month = String(currentDate.getMonth() + 1).padStart(2, '0');
         const year = String(currentDate.getFullYear()).substring(2, 4);
-        const formattedDate = `${day}.${month}.${year}`;
+
+        // Check if the current date is today
+        const isToday = (day === todayDay && month === todayMonth && year === todayYear);
 
         // Update the DOM
-        document.querySelector('.currentDate').innerHTML = '<i class="bi bi-arrow-left date-selector date-previous" onclick="changeDay(-1)"></i> ' + formattedDate + ' <i class="bi bi-arrow-right date-selector date-next" onclick="changeDay(1)"></i>';
+        let dayHTML = isToday ? `<span class="text-primary">${day}</span>` : day;
+        document.querySelector('.currentDate').innerHTML = `<i class="bi bi-arrow-left date-selector date-previous" onclick="changeDay(-1)"></i> ${dayHTML}.${month}.${year} <i class="bi bi-arrow-right date-selector date-next" onclick="changeDay(1)"></i>`;
 
         // Save the new date in localStorage
         localStorage.setItem('currentDate', currentDate);
