@@ -118,13 +118,16 @@ let currentDate;
 
 function initializeDate() {
     try {
-        // Retrieve the date from localStorage
         const savedDate = localStorage.getItem('currentDate');
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
 
         if (savedDate) {
             currentDate = new Date(savedDate);
+            currentDate.setHours(0, 0, 0, 0);
         } else {
-            currentDate = new Date(); // If no date in localStorage, use today's date
+            currentDate = new Date();
+            localStorage.setItem('currentDate', currentDate.toISOString());
         }
 
         updateDate();
@@ -151,11 +154,11 @@ function updateDate() {
         const isToday = (day === todayDay && month === todayMonth && year === todayYear);
 
         // Update the DOM
-        let dayHTML = isToday ? `<span class="text-primary">${day}</span>` : day;
+        let dayHTML = isToday ? `<span class="text-secondary">${day}</span>` : day;
         document.querySelector('.currentDate').innerHTML = `<i class="bi bi-arrow-left date-selector date-previous" onclick="changeDay(-1)"></i> ${dayHTML}.${month}.${year} <i class="bi bi-arrow-right date-selector date-next" onclick="changeDay(1)"></i>`;
 
         // Save the new date in localStorage
-        localStorage.setItem('currentDate', currentDate);
+        localStorage.setItem('currentDate', currentDate.toISOString());
     } catch (error) {
         outputError(error.message + ` (${error.stack})`);
         console.log(error.message);
