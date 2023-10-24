@@ -303,7 +303,17 @@ async function fetchLunchMajority(URL, divId) {
         initializeDate();
 
         // Convert currentDate to the ISO format used by data.MenusForDays
-        const isoDate = currentDate.toISOString().split('T')[0] + 'T00:00:00+00:00';
+        const originalDateString = currentDate;
+        const originalDate = new Date(originalDateString);
+
+        // Getting the date components in local time
+        const yyyy = originalDate.getFullYear();
+        const mm = String(originalDate.getMonth() + 1).padStart(2, '0');  // Months are zero-based
+        const dd = String(originalDate.getDate()).padStart(2, '0');
+
+        // Constructing the new ISO 8601 string in UTC
+        const isoDate = `${yyyy}-${mm}-${dd}T00:00:00+00:00`;
+        console.log(isoDate);
 
         // Find today's lunch menu
         const todayMenu = data.MenusForDays.find(dayMenu => dayMenu.Date === isoDate);
