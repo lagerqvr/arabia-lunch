@@ -25,14 +25,17 @@ if (chosenLang === 'en') {
     document.querySelector('#lunchline').innerHTML = 'One place for all your lunchlist needs.';
     document.querySelector('#lang-btn').innerHTML = 'Language';
     document.querySelectorAll('.lang-reminder').innerHTML = 'Not all languages are available for all restaurants';
+    document.querySelector('#copy-text').innerHTML = 'Copy lunch to clipboard';
 } else if (chosenLang === 'sv-FI') {
     document.querySelector('#lunchline').innerHTML = 'En plats för alla dina lunchmenyer.'
     document.querySelector('#lang-btn').innerHTML = 'Språk';
     document.querySelectorAll('.lang-reminder').innerHTML = 'Alla språk är inte tillgängliga för alla restauranger';
+    document.querySelector('#copy-text').innerHTML = 'Kopiera lunchlistorna';
 } else {
     document.querySelector('#lunchline').innerHTML = 'Kaikki lounaslistat yhdessä paikassa.'
     document.querySelector('#lang-btn').innerHTML = 'Kieli';
     document.querySelectorAll('.lang-reminder').innerHTML = 'Kaikkia kieliä ei ole saatavilla kaikissa ravintoloissa';
+    document.querySelector('#copy-text').innerHTML = 'Kopioi lounaslistat';
 };
 
 // Function to set language
@@ -48,14 +51,17 @@ const setLanguage = () => {
                 document.querySelector('#lunchline').innerHTML = 'One place for all your lunchlist needs.';
                 document.querySelector('#lang-btn').innerHTML = 'Language';
                 document.querySelectorAll('.lang-reminder').innerHTML = 'Not all languages are available for all restaurants';
+                document.querySelector('#copy-text').innerHTML = 'Copy lunch to clipboard';
             } else if (lang === 'sv-FI') {
                 document.querySelector('#lunchline').innerHTML = 'En plats för alla dina lunchmenyer.'
                 document.querySelector('#lang-btn').innerHTML = 'Språk';
                 document.querySelectorAll('.lang-reminder').innerHTML = 'Alla språk är inte tillgängliga för alla restauranger';
+                document.querySelector('#copy-text').innerHTML = 'Kopiera lunchlistorna';
             } else {
                 document.querySelector('#lunchline').innerHTML = 'Kaikki lounaslistat yhdessä paikassa.'
                 document.querySelector('#lang-btn').innerHTML = 'Kieli';
                 document.querySelectorAll('.lang-reminder').innerHTML = 'Kaikkia kieliä ei ole saatavilla kaikissa ravintoloissa';
+                document.querySelector('#copy-text').innerHTML = 'Kopioi lounaslistat';
             }
             localStorage.setItem('selected-language', lang);
 
@@ -587,6 +593,55 @@ async function fetchChemicumLunch() {
     }
 };
 
+const copyLunchToClipboard = () => {
+    try {
+        const lang = localStorage.getItem('selected-language') || 'en';
+        let heading;
+        if (lang === 'en') {
+            heading = 'Today\'s lunch:';
+        } else if (lang === 'sv-FI') {
+            heading = 'Dagens lunch:';
+        } else {
+            heading = 'Päivän lounas:';
+        }
+
+        // Regular expression to extract menu items
+        const regex = /:\s*([^:(]*?)(?:\s*\(|$)/g;
+
+        // Function to clean up and format menu items
+        const cleanUpItems = (items) => {
+            return items.map(item => {
+                let cleanedItem = item.trim().replace(/,\s*$/, '');
+                return cleanedItem;
+            }).filter(item => item && item !== "()");
+        };
+
+        // Function to extract and format menu from a given string
+        const formatMenu = (menuString, locationName) => {
+            const matches = [...menuString.matchAll(regex)];
+            let extractedItems = matches.map(match => match[1].trim()).filter(item => item && item !== "()");
+            // Clean up extracted items to avoid double commas
+            extractedItems = cleanUpItems(extractedItems);
+            return extractedItems.length > 0 ? `${locationName}: ${extractedItems.join(', ')}` : `${locationName}: No items listed`;
+        };
+
+        // Get the menu items from the DOM
+        const arcadaMenu = document.getElementById('arcada-menu').innerText;
+        const diakMenu = document.getElementById('diak-menu').innerText;
+        const artebiaMenu = document.getElementById('artebia-menu').innerText;
+        const chemicumMenu = document.getElementById('chemicum-menu').innerText;
+
+        // Construct the lunch object
+        const lunchObj = `${heading}\n\n${formatMenu(arcadaMenu, "Arcada")}\n${formatMenu(diakMenu, "DIAK")}\n${formatMenu(artebiaMenu, "Artebia")}\n${formatMenu(chemicumMenu, "Chemicum")}`;
+
+        // Copy the lunch object to the clipboard
+        navigator.clipboard.writeText(lunchObj)
+    } catch (error) {
+        outputError(error.message + ` (${error.stack})`);
+        console.error('An error occurred:', error);
+    }
+};
+
 document.querySelector('#collapseOne').addEventListener('show.bs.collapse', function () {
     fetchLunchMajority(`https://www.compass-group.fi/menuapi/feed/json?costNumber=3003&language=${localStorage.getItem('selected-language') || 'en'}`, 'arcada-menu');
 });
@@ -601,6 +656,10 @@ document.querySelector('#collapseThree').addEventListener('show.bs.collapse', fu
 
 document.querySelector('#collapseFour').addEventListener('show.bs.collapse', function () {
     fetchChemicumLunch();
+});
+
+document.getElementById('copy-div').addEventListener('click', function () {
+    copyLunchToClipboard();
 });
 
 // Call the async function to fetch and display the food menu
