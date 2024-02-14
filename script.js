@@ -632,7 +632,7 @@ const copyLunchToClipboard = () => {
         const chemicumMenu = document.getElementById('chemicum-menu').innerText;
 
         // Construct the lunch object
-        const lunchObj = `${heading}\n\n${formatMenu(arcadaMenu, "Arcada")}\n${formatMenu(diakMenu, "DIAK")}\n${formatMenu(artebiaMenu, "Artebia")}\n${formatMenu(chemicumMenu, "Chemicum")}`;
+        const lunchObj = `${heading}\n\n${formatMenu(arcadaMenu, "Arcada")}\n\n${formatMenu(diakMenu, "DIAK")}\n\n${formatMenu(artebiaMenu, "Artebia")}\n\n${formatMenu(chemicumMenu, "Chemicum")}`;
 
         // Copy the lunch object to the clipboard
         navigator.clipboard.writeText(lunchObj)

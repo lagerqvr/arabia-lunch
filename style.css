@@ -97,5 +97,5 @@ footer>a {
 }
 
 .animated {
-    animation: pulseAnimation 0.5s ease;
+    animation: pulseAnimation 0.3s ease;
 }
