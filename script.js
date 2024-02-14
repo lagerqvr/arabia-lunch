@@ -25,7 +25,7 @@ if (chosenLang === 'en') {
     document.querySelector('#lunchline').innerHTML = 'One place for all your lunchlist needs.';
     document.querySelector('#lang-btn').innerHTML = 'Language';
     document.querySelectorAll('.lang-reminder').innerHTML = 'Not all languages are available for all restaurants';
-    document.querySelector('#copy-text').innerHTML = 'Copy lunch to clipboard';
+    document.querySelector('#copy-text').innerHTML = 'Copy lunch menu';
 } else if (chosenLang === 'sv-FI') {
     document.querySelector('#lunchline').innerHTML = 'En plats för alla dina lunchmenyer.'
     document.querySelector('#lang-btn').innerHTML = 'Språk';
@@ -51,7 +51,7 @@ const setLanguage = () => {
                 document.querySelector('#lunchline').innerHTML = 'One place for all your lunchlist needs.';
                 document.querySelector('#lang-btn').innerHTML = 'Language';
                 document.querySelectorAll('.lang-reminder').innerHTML = 'Not all languages are available for all restaurants';
-                document.querySelector('#copy-text').innerHTML = 'Copy lunch to clipboard';
+                document.querySelector('#copy-text').innerHTML = 'Copy lunch menu';
             } else if (lang === 'sv-FI') {
                 document.querySelector('#lunchline').innerHTML = 'En plats för alla dina lunchmenyer.'
                 document.querySelector('#lang-btn').innerHTML = 'Språk';
@@ -622,7 +622,7 @@ const copyLunchToClipboard = () => {
             let extractedItems = matches.map(match => match[1].trim()).filter(item => item && item !== "()");
             // Clean up extracted items to avoid double commas
             extractedItems = cleanUpItems(extractedItems);
-            return extractedItems.length > 0 ? `${locationName}: ${extractedItems.join(', ')}` : `${locationName}: No items listed`;
+            return extractedItems.length > 0 ? `\u{1F4CD}${locationName}: ${extractedItems.join(', ')}` : `\u{1F4CD}${locationName}: No items listed`;
         };
 
         // Get the menu items from the DOM
