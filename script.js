@@ -659,7 +659,13 @@ document.querySelector('#collapseFour').addEventListener('show.bs.collapse', fun
 });
 
 document.getElementById('copy-div').addEventListener('click', function () {
+    this.classList.add('animated');
+
     copyLunchToClipboard();
+
+    this.addEventListener('animationend', function () {
+        this.classList.remove('animated');
+    });
 });
 
 // Call the async function to fetch and display the food menu
