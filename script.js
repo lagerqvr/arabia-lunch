@@ -337,7 +337,7 @@ async function fetchLunchMajority(URL, divId) {
             <div class="col-8">
                 <p class="openTxt"><b>${openTxt}</b><span
                         class="text-success"> 
-                        ${todayMenu.LunchTime}</span>
+                        ${todayMenu.LunchTime === null ? " - " : todayMenu.LunchTime}</span>
                 </p>
             </div>
             <div class="col-4 d-flex justify-content-end">
@@ -361,7 +361,7 @@ async function fetchLunchMajority(URL, divId) {
             <div class="col-8">
                 <p class="openTxt"><b>${openTxt}</b><span
                         class="text-success"> 
-                        ${todayMenu.LunchTime}</span>
+                        ${todayMenu.LunchTime === null ? " - " : todayMenu.LunchTime}</span>
                 </p>
             </div>
             <div class="col-4 d-flex justify-content-end">
@@ -385,7 +385,7 @@ async function fetchLunchMajority(URL, divId) {
             <div class="col-8">
                 <p class="openTxt"><b>${openTxt}</b><span
                         class="text-success"> 
-                        ${todayMenu.LunchTime}</span>
+                        ${todayMenu.LunchTime === null ? " - " : todayMenu.LunchTime}</span>
                 </p>
             </div>
             <div class="col-4 d-flex justify-content-end">
@@ -549,7 +549,7 @@ async function fetchChemicumLunch() {
             <div class="col-8">
                 <p class="openTxt"><b>${openTxt}</b><span
                         class="text-success"> 
-                        ${lunchData.menuData.visitingHours.lounas.items[0].hours}</span>
+                        ${lunchData.menuData.visitingHours.lounas.items[0].hours === null ? " - " : lunchData.menuData.visitingHours.lounas.items[0].hours}</span>
                 </p>
             </div>
             <div class="col-4 d-flex justify-content-end">
