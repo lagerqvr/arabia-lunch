@@ -24,17 +24,17 @@ document.addEventListener('DOMContentLoaded', () => {
 if (chosenLang === 'en') {
     document.querySelector('#lunchline').innerHTML = 'One place for all your lunchlist needs.';
     document.querySelector('#lang-btn').innerHTML = 'Language';
-    document.querySelectorAll('.lang-reminder').innerHTML = 'Not all languages are available for all restaurants';
+    document.querySelectorAll('.lang-reminder').innerHTML = 'Not all menus are translated';
     document.querySelector('#copy-text').innerHTML = 'Copy lunch menu';
 } else if (chosenLang === 'sv-FI') {
     document.querySelector('#lunchline').innerHTML = 'En plats för alla dina lunchmenyer.'
     document.querySelector('#lang-btn').innerHTML = 'Språk';
-    document.querySelectorAll('.lang-reminder').innerHTML = 'Alla språk är inte tillgängliga för alla restauranger';
+    document.querySelectorAll('.lang-reminder').innerHTML = 'Alla menyer är inte översatta';
     document.querySelector('#copy-text').innerHTML = 'Kopiera lunchlistorna';
 } else {
     document.querySelector('#lunchline').innerHTML = 'Kaikki lounaslistat yhdessä paikassa.'
     document.querySelector('#lang-btn').innerHTML = 'Kieli';
-    document.querySelectorAll('.lang-reminder').innerHTML = 'Kaikkia kieliä ei ole saatavilla kaikissa ravintoloissa';
+    document.querySelectorAll('.lang-reminder').innerHTML = 'Kaikkia lounaslistoja ei ole käännetty';
     document.querySelector('#copy-text').innerHTML = 'Kopioi lounaslistat';
 };
 
@@ -50,17 +50,17 @@ const setLanguage = () => {
             if (lang === 'en') {
                 document.querySelector('#lunchline').innerHTML = 'One place for all your lunchlist needs.';
                 document.querySelector('#lang-btn').innerHTML = 'Language';
-                document.querySelectorAll('.lang-reminder').innerHTML = 'Not all languages are available for all restaurants';
+                document.querySelectorAll('.lang-reminder').innerHTML = 'Not all menus are translated';
                 document.querySelector('#copy-text').innerHTML = 'Copy lunch menu';
             } else if (lang === 'sv-FI') {
                 document.querySelector('#lunchline').innerHTML = 'En plats för alla dina lunchmenyer.'
                 document.querySelector('#lang-btn').innerHTML = 'Språk';
-                document.querySelectorAll('.lang-reminder').innerHTML = 'Alla språk är inte tillgängliga för alla restauranger';
+                document.querySelectorAll('.lang-reminder').innerHTML = 'Alla menyer är inte översatta';
                 document.querySelector('#copy-text').innerHTML = 'Kopiera lunchlistorna';
             } else {
                 document.querySelector('#lunchline').innerHTML = 'Kaikki lounaslistat yhdessä paikassa.'
                 document.querySelector('#lang-btn').innerHTML = 'Kieli';
-                document.querySelectorAll('.lang-reminder').innerHTML = 'Kaikkia kieliä ei ole saatavilla kaikissa ravintoloissa';
+                document.querySelectorAll('.lang-reminder').innerHTML = 'Kaikkia lounaslistoja ei ole käännetty';
                 document.querySelector('#copy-text').innerHTML = 'Kopioi lounaslistat';
             }
             localStorage.setItem('selected-language', lang);
@@ -279,11 +279,11 @@ async function fetchLunchMajority(URL, divId) {
 
         reminderNotes.forEach((reminderNotes) => {
             if (lang === 'en') {
-                reminderNotes.innerHTML = 'Not all languages are available for all restaurants';
+                reminderNotes.innerHTML = 'Not all menus are translated';
             } else if (lang === 'sv-FI') {
-                reminderNotes.innerHTML = 'Alla språk är inte tillgängliga för alla restauranger';
+                reminderNotes.innerHTML = 'Alla menyer är inte översatta';
             } else {
-                reminderNotes.innerHTML = 'Kaikkia kieliä ei ole saatavilla kaikissa ravintoloissa';
+                reminderNotes.innerHTML = 'Kaikkia lounaslistoja ei ole käännetty';
             }
         });
 
@@ -596,13 +596,14 @@ async function fetchChemicumLunch() {
 const copyLunchToClipboard = () => {
     try {
         const lang = localStorage.getItem('selected-language') || 'en';
+        const trimmedDate = document.querySelector('.currentDate').innerText.trim().replace(/^(0?)(\d{1,2})\.(0?)(\d{1,2})\.\d{2}$/, "$2.$4");
         let heading;
         if (lang === 'en') {
-            heading = 'Today\'s lunch:';
+            heading = 'Today\'s lunch (' + trimmedDate + '):';
         } else if (lang === 'sv-FI') {
-            heading = 'Dagens lunch:';
+            heading = 'Dagens lunch (' + trimmedDate + '):';
         } else {
-            heading = 'Päivän lounas:';
+            heading = 'Päivän lounas (' + trimmedDate + '):';
         }
 
         // Regular expression to extract menu items
